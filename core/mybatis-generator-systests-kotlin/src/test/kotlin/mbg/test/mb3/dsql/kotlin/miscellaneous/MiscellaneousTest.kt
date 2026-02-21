@@ -1,5 +1,5 @@
 /*
- *    Copyright 2006-2025 the original author or authors.
+ *    Copyright 2006-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import mbg.test.mb3.common.TestEnum
 import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.mapper.MyObjectMapper
 import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.mapper.*
 import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.mapper.MyObjectDynamicSqlSupport.myObject
-import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.model.Enumordinaltest
-import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.model.Enumtest
+import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.model.EnumOrdinalTest
+import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.model.EnumTest
 import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.model.MyObject
 import mbg.test.mb3.generated.dsql.kotlin.miscellaneous.model.Regexrename
 import org.apache.ibatis.session.RowBounds
@@ -930,9 +930,9 @@ class MiscellaneousTest : AbstractAnnotatedMiscellaneousTest() {
     @Test
     fun testEnum() {
         openSession().use { sqlSession ->
-            val mapper = sqlSession.getMapper(EnumtestMapper::class.java)
+            val mapper = sqlSession.getMapper(EnumTestMapper::class.java)
 
-            val enumTest = Enumtest()
+            val enumTest = EnumTest()
             enumTest.id = 1
             enumTest.name = TestEnum.FRED
             val rows = mapper.insert(enumTest)
@@ -950,13 +950,13 @@ class MiscellaneousTest : AbstractAnnotatedMiscellaneousTest() {
     @Test
     fun testEnumInsertMultiple() {
         openSession().use { sqlSession ->
-            val mapper = sqlSession.getMapper(EnumtestMapper::class.java)
+            val mapper = sqlSession.getMapper(EnumTestMapper::class.java)
             val records = listOf(
-                Enumtest().apply {
+                EnumTest().apply {
                     id = 1
                     name = TestEnum.FRED
                 },
-                Enumtest().apply {
+                EnumTest().apply {
                     id = 2
                     name = TestEnum.BARNEY
                 }
@@ -977,10 +977,10 @@ class MiscellaneousTest : AbstractAnnotatedMiscellaneousTest() {
     @Test
     fun testEnumOrdinal() {
         openSession().use { sqlSession ->
-            val mapper = sqlSession.getMapper(EnumordinaltestMapper::class.java)
+            val mapper = sqlSession.getMapper(EnumOrdinalTestMapper::class.java)
 
 
-            val enumTest = Enumordinaltest()
+            val enumTest = EnumOrdinalTest()
             enumTest.id = 1
             enumTest.name = TestEnum.FRED
 
@@ -999,13 +999,13 @@ class MiscellaneousTest : AbstractAnnotatedMiscellaneousTest() {
     @Test
     fun testEnumOrdinalInsertMultiple() {
         openSession().use { sqlSession ->
-            val mapper = sqlSession.getMapper(EnumordinaltestMapper::class.java)
+            val mapper = sqlSession.getMapper(EnumOrdinalTestMapper::class.java)
             val records = listOf(
-                Enumordinaltest().apply {
+                EnumOrdinalTest().apply {
                     id = 1
                     name = TestEnum.FRED
                 },
-                Enumordinaltest().apply {
+                EnumOrdinalTest().apply {
                     id = 2
                     name = TestEnum.BARNEY
                 }

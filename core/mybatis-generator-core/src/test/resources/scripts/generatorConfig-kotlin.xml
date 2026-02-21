@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2006-2025 the original author or authors.
+       Copyright 2006-2026 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -155,10 +155,10 @@
       <generatedKey column="CUST_ID" sqlStatement="call next value for TestSequence" />
       <columnRenamingRule searchString="^CUST" />
     </table>
-    <table tableName="EnumTest">
+    <table tableName="Enum_Test">
       <columnOverride column="name" javaType="mbg.test.mb3.common.TestEnum"/>
     </table>
-    <table tableName="EnumOrdinalTest">
+    <table tableName="Enum_Ordinal_Test">
       <columnOverride column="name" javaType="mbg.test.mb3.common.TestEnum" jdbcType="INTEGER"
                       typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" >
         <property name="forceJavaTypeIntoMapping" value="true" />
