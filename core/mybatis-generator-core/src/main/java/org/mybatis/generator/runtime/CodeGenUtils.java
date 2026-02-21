@@ -15,7 +15,11 @@
  */
 package org.mybatis.generator.runtime;
 
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+
+import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
@@ -23,6 +27,7 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinType;
 import org.mybatis.generator.api.dom.xml.XmlElement;
+import org.mybatis.generator.config.Context;
 
 public class CodeGenUtils {
     private CodeGenUtils() {
@@ -150,5 +155,22 @@ public class CodeGenUtils {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    public static @Nullable String findTableOrClientProperty(String property, IntrospectedTable introspectedTable,
+                                                             Context context) {
+        String value = introspectedTable.getTableConfigurationProperty(property);
+        if (!stringHasValue(value)) {
+            value = context.getJavaClientGeneratorConfiguration()
+                    .map(c -> c.getProperty(property))
+                    .orElse(null);
+        }
+
+        return value;
+    }
+
+    public static boolean findTableOrClientPropertyAsBoolean(String property, IntrospectedTable introspectedTable,
+                                                             Context context) {
+        return Boolean.parseBoolean(findTableOrClientProperty(property, introspectedTable, context));
     }
 }
