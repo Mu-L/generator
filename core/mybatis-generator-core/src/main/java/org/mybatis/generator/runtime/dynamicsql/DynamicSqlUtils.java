@@ -18,6 +18,7 @@ package org.mybatis.generator.runtime.dynamicsql;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.config.GeneratedKey;
+import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 
 public class DynamicSqlUtils {
@@ -25,8 +26,12 @@ public class DynamicSqlUtils {
         // utility class - no instances
     }
 
-    public static String calculateFieldName(String tableFieldName, IntrospectedColumn column) {
+    public static String calculateFieldName(String tableFieldName, IntrospectedColumn column, boolean useSnakeCase) {
         String fieldName = column.getJavaProperty();
+        if (useSnakeCase) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
+
         if (fieldName.equals(tableFieldName)) {
             // name collision, no shortcut generated
             fieldName = tableFieldName + "." + fieldName; //$NON-NLS-1$

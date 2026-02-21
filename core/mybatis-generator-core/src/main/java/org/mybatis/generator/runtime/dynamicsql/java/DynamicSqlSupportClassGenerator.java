@@ -32,6 +32,7 @@ import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.internal.util.messages.Messages;
+import org.mybatis.generator.runtime.CodeGenUtils;
 
 public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
     private DynamicSqlSupportClassGenerator(Builder builder) {
@@ -95,6 +96,11 @@ public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
                 new FullyQualifiedJavaType(introspectedTable.getMyBatisDynamicSQLTableObjectName());
         String fieldName =
                 JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
+        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
+
         Field field = new Field(fieldName, fqjt);
         commentGenerator.addFieldAnnotation(field, introspectedTable, topLevelClass.getImportedTypes());
         field.setVisibility(JavaVisibility.PUBLIC);
@@ -120,6 +126,10 @@ public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
 
         FullyQualifiedJavaType fieldType = calculateFieldType(javaType);
         String fieldName = column.getJavaProperty();
+        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
 
         if (fieldName.equals(tableFieldName)) {
             // name collision, skip the shortcut field

@@ -27,7 +27,9 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
+import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
+import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.JavaFieldAndImports;
 import org.mybatis.generator.runtime.common.RootInterfaceUtility;
@@ -68,8 +70,14 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
 
         recordType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         resultMapId = recordType.getShortNameWithoutTypeArguments() + "Result"; //$NON-NLS-1$
-        tableFieldName =
-                JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
+        String s =  JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
+        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+            tableFieldName = StringUtility.convertCamelCaseToSnakeCase(s);
+        } else {
+            tableFieldName = s;
+        }
+
         fragmentGenerator = new FragmentGenerator.Builder()
                 .withIntrospectedTable(introspectedTable)
                 .withResultMapId(resultMapId)
@@ -136,7 +144,7 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
         interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Mapper")); //$NON-NLS-1$
         interfaze.addAnnotation("@Mapper"); //$NON-NLS-1$
 
-        RootInterfaceUtility.addRootInterfaceIsNecessary(interfaze, introspectedTable, context);
+        RootInterfaceUtility.addRootInterfaceIsNecessary(interfaze, introspectedTable);
         return interfaze;
     }
 

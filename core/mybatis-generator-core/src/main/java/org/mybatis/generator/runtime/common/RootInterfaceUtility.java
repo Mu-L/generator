@@ -22,20 +22,18 @@ import java.util.stream.Collectors;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.runtime.CodeGenUtils;
 
 public class RootInterfaceUtility {
-    public static void addRootInterfaceIsNecessary(Interface mapper,
-                                                   IntrospectedTable introspectedTable, Context context) {
+    public static void addRootInterfaceIsNecessary(Interface mapper, IntrospectedTable introspectedTable) {
         String rootInterface = CodeGenUtils.findTableOrClientProperty(PropertyRegistry.ANY_ROOT_INTERFACE,
-                introspectedTable, context);
+                introspectedTable);
 
         if (stringHasValue(rootInterface)) {
             FullyQualifiedJavaType baseInterface = new FullyQualifiedJavaType(rootInterface);
             String inject = CodeGenUtils.findTableOrClientProperty(
-                    PropertyRegistry.ANY_INJECT_MODEL_INTO_ROOT_INTERFACE, introspectedTable, context);
+                    PropertyRegistry.ANY_INJECT_MODEL_INTO_ROOT_INTERFACE, introspectedTable);
 
             FullyQualifiedJavaType rootInterfaceType;
             if (Boolean.parseBoolean(inject)) {

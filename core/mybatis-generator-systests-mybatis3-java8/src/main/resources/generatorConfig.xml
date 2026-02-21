@@ -75,6 +75,7 @@
     <table schema="mbgtest" tableName="Translations" domainObjectName="sub.Translation"/>
     <table schema="mbgtest" tableName="Ids" domainObjectName="Id" modelType="record">
       <property name="dynamicSqlSupportClassName" value="sub.IdDSQLSupport"/>
+      <property name="dynamicSqlUseSnakeCase" value="true"/>
     </table>
   </context>
 
@@ -227,6 +228,7 @@
       <columnOverride column="name" javaType="mbg.test.mb3.common.TestEnum" jdbcType="INTEGER"
                       typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" >
         <property name="forceJavaTypeIntoMapping" value="true" />
+        <property name="dynamicSqlUseSnakeCase" value="true"/>
       </columnOverride>
     </table>
     <table tableName="GeneratedAlwaysTest" >

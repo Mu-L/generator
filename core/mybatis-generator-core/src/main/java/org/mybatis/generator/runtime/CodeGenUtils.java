@@ -27,7 +27,6 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinType;
 import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.config.Context;
 
 public class CodeGenUtils {
     private CodeGenUtils() {
@@ -157,11 +156,10 @@ public class CodeGenUtils {
                 .orElse(false);
     }
 
-    public static @Nullable String findTableOrClientProperty(String property, IntrospectedTable introspectedTable,
-                                                             Context context) {
+    public static @Nullable String findTableOrClientProperty(String property, IntrospectedTable introspectedTable) {
         String value = introspectedTable.getTableConfigurationProperty(property);
         if (!stringHasValue(value)) {
-            value = context.getJavaClientGeneratorConfiguration()
+            value = introspectedTable.getContext().getJavaClientGeneratorConfiguration()
                     .map(c -> c.getProperty(property))
                     .orElse(null);
         }
@@ -169,8 +167,7 @@ public class CodeGenUtils {
         return value;
     }
 
-    public static boolean findTableOrClientPropertyAsBoolean(String property, IntrospectedTable introspectedTable,
-                                                             Context context) {
-        return Boolean.parseBoolean(findTableOrClientProperty(property, introspectedTable, context));
+    public static boolean findTableOrClientPropertyAsBoolean(String property, IntrospectedTable introspectedTable) {
+        return Boolean.parseBoolean(findTableOrClientProperty(property, introspectedTable));
     }
 }

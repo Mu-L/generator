@@ -30,7 +30,9 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Parameter;
+import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
+import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.JavaMethodParts;
 import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
@@ -40,16 +42,19 @@ public class FragmentGenerator {
     private final IntrospectedTable introspectedTable;
     private final String resultMapId;
     private final String tableFieldName;
+    private final boolean useSnakeCase;
 
     private FragmentGenerator(Builder builder) {
         this.introspectedTable = Objects.requireNonNull(builder.introspectedTable);
         this.resultMapId = Objects.requireNonNull(builder.resultMapId);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
+        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE,
+                introspectedTable);
     }
 
     public String getSelectList() {
         return introspectedTable.getAllColumns().stream()
-                .map(c -> DynamicSqlUtils.calculateFieldName(tableFieldName, c))
+                .map(c -> DynamicSqlUtils.calculateFieldName(tableFieldName, c, useSnakeCase))
                 .collect(Collectors.joining(", ")); //$NON-NLS-1$
     }
 
@@ -58,19 +63,23 @@ public class FragmentGenerator {
 
         boolean first = true;
         for (IntrospectedColumn column : introspectedTable.getPrimaryKeyColumns()) {
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column);
+            String parameterName = column.getJavaProperty();
+            if (!useSnakeCase) {
+                parameterName += "_"; //$NON-NLS-1$
+            }
+
+            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
             builder.withImport(column.getFullyQualifiedJavaType());
-            builder.withParameter(new Parameter(
-                    column.getFullyQualifiedJavaType(), column.getJavaProperty() + "_")); //$NON-NLS-1$
+            builder.withParameter(new Parameter(column.getFullyQualifiedJavaType(), parameterName));
             if (first) {
                 builder.withBodyLine("    c.where(" + fieldName //$NON-NLS-1$
-                        + ", isEqualTo(" + column.getJavaProperty() //$NON-NLS-1$
-                        + "_))"); //$NON-NLS-1$
+                        + ", isEqualTo(" + parameterName //$NON-NLS-1$
+                        + "))"); //$NON-NLS-1$
                 first = false;
             } else {
                 builder.withBodyLine("    .and(" + fieldName //$NON-NLS-1$
-                        + ", isEqualTo(" + column.getJavaProperty() //$NON-NLS-1$
-                        + "_))"); //$NON-NLS-1$
+                        + ", isEqualTo(" + parameterName //$NON-NLS-1$
+                        + "))"); //$NON-NLS-1$
             }
         }
         builder.withBodyLine(");"); //$NON-NLS-1$
@@ -83,7 +92,7 @@ public class FragmentGenerator {
 
         boolean first = true;
         for (IntrospectedColumn column : introspectedTable.getPrimaryKeyColumns()) {
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column);
+            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
             String methodName = JavaBeansUtil.getCallingGetterMethodName(column);
             if (first) {
                 lines.add(prefix + ".where(" + fieldName //$NON-NLS-1$
@@ -230,7 +239,7 @@ public class FragmentGenerator {
         boolean first = true;
         while (iter.hasNext()) {
             IntrospectedColumn column = iter.next();
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column);
+            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
             String methodName = JavaBeansUtil.getCallingGetterMethodName(column);
 
             String start;
