@@ -82,9 +82,7 @@
   <context id="dsql-records" defaultModelType="record">
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
 
-    <jdbcConnection driverClass="org.hsqldb.jdbcDriver"
-                    connectionURL="jdbc:hsqldb:mem:aname"
-                    userId="sa" />
+    <jdbcConnection driverClass="org.hsqldb.jdbcDriver" connectionURL="jdbc:hsqldb:mem:aname" userId="sa" />
 
     <javaTypeResolver>
       <property name="useJSR310Types" value="true"/>
@@ -97,6 +95,7 @@
 
     <javaClientGenerator targetPackage="mbg.test.mb3.generated.dsql.record.mapper"  targetProject="MAVEN">
       <property name="enableSubPackages" value="true" />
+      <property name="dynamicSqlUseSnakeCase" value="true" />
     </javaClientGenerator>
 
     <table tableName="FieldsOnly" enableSelectByExample="false"/>
@@ -139,9 +138,7 @@
   <context id="dsql-readonly" targetRuntime="MyBatis3DynamicSql">
     <plugin type="org.mybatis.generator.plugins.dsql.ReadOnlyPlugin" />
 
-    <jdbcConnection driverClass="org.hsqldb.jdbcDriver"
-        connectionURL="jdbc:hsqldb:mem:aname"
-        userId="sa" />
+    <jdbcConnection driverClass="org.hsqldb.jdbcDriver" connectionURL="jdbc:hsqldb:mem:aname" userId="sa" />
 
     <javaTypeResolver>
       <property name="useJSR310Types" value="true"/>
