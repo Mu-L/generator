@@ -32,6 +32,7 @@ import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.internal.util.messages.Messages;
+import org.mybatis.generator.runtime.CodeGenUtils;
 
 public class KotlinDynamicSqlSupportClassGenerator extends AbstractGenerator {
     private KotlinFile kotlinFile;
@@ -123,7 +124,11 @@ public class KotlinDynamicSqlSupportClassGenerator extends AbstractGenerator {
 
     private KotlinProperty calculateTableProperty() {
         String tableType = introspectedTable.getMyBatisDynamicSQLTableObjectName();
-        String fieldName = JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
+        String fieldName =  JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
+        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
 
         return KotlinProperty.newVal(fieldName)
                 .withInitializationString(tableType + "()") //$NON-NLS-1$
@@ -138,6 +143,10 @@ public class KotlinDynamicSqlSupportClassGenerator extends AbstractGenerator {
         kotlinFile.addImports(kt.getImportList());
 
         String fieldName = column.getJavaProperty();
+        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
 
         // outer object
         if (fieldName.equals(tableFieldName)) {

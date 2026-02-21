@@ -85,7 +85,7 @@ public class InsertMultipleExtensionFunctionGenerator extends AbstractKotlinMapp
         for (IntrospectedColumn column : columns) {
             AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
                     AbstractKotlinMapperFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
-                            supportObjectImport, column);
+                            supportObjectImport, column, useSnakeCase);
             functionAndImports.getImports().add(fieldNameAndImport.importString());
 
             function.addCodeLine("    map(" + fieldNameAndImport.fieldName() //$NON-NLS-1$

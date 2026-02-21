@@ -20,15 +20,21 @@ import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.kotlin.KotlinArg;
+import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.runtime.AbstractKotlinFunctionGenerator;
+import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
 
 public abstract class AbstractKotlinMapperFunctionGenerator extends AbstractKotlinFunctionGenerator {
     protected final String tableFieldName;
+    protected final boolean useSnakeCase;
 
     protected AbstractKotlinMapperFunctionGenerator(BaseBuilder<?> builder) {
         super(builder);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
+        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE,
+                introspectedTable);
     }
 
     protected void acceptParts(KotlinFunctionAndImports functionAndImports, KotlinFunctionParts functionParts) {
@@ -50,8 +56,11 @@ public abstract class AbstractKotlinMapperFunctionGenerator extends AbstractKotl
     }
 
     public static FieldNameAndImport calculateFieldNameAndImport(String tableFieldName, String supportObjectImport,
-                                                                 IntrospectedColumn column) {
+                                                                 IntrospectedColumn column, boolean useSnakeCase) {
         String fieldName = column.getJavaProperty();
+        if (useSnakeCase) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
         String importString;
         if (fieldName.equals(tableFieldName)) {
             // name collision, no shortcut generated

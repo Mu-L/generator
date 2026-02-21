@@ -64,7 +64,7 @@ public class InsertSelectiveExtensionFunctionGenerator extends AbstractKotlinMap
         for (IntrospectedColumn column : columns) {
             AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
                     calculateFieldNameAndImport(tableFieldName,
-                            supportObjectImport, column);
+                            supportObjectImport, column, useSnakeCase);
             functionAndImports.getImports().add(fieldNameAndImport.importString());
 
             if (column.isSequenceColumn()) {

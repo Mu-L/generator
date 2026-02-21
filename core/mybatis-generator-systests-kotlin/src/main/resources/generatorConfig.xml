@@ -25,9 +25,7 @@
   <context id="kotlin" targetRuntime="MyBatis3Kotlin">
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
 
-    <jdbcConnection driverClass="org.hsqldb.jdbcDriver"
-        connectionURL="jdbc:hsqldb:mem:aname"
-        userId="sa" />
+    <jdbcConnection driverClass="org.hsqldb.jdbcDriver" connectionURL="jdbc:hsqldb:mem:aname" userId="sa" />
 
     <javaTypeResolver>
       <property name="useJSR310Types" value="true"/>
@@ -74,7 +72,9 @@
       <columnOverride column="class" property="dbClass" />
     </table>
     <table schema="mbgtest" tableName="Translations" domainObjectName="Translation"/>
-    <table schema="mbgtest" tableName="Ids" domainObjectName="Id"/>
+    <table schema="mbgtest" tableName="Ids" domainObjectName="Id">
+      <property name="dynamicSqlUseSnakeCase" value="true"/>
+    </table>
   </context>
 
   <context id="kotlin-readonly" targetRuntime="MyBatis3Kotlin">
@@ -136,6 +136,7 @@
     </javaModelGenerator>
 
     <javaClientGenerator targetPackage="mbg.test.mb3.generated.dsql.kotlin.miscellaneous.mapper"  targetProject="MAVEN">
+      <property name="dynamicSqlUseSnakeCase" value="true"/>
     </javaClientGenerator>
 
     <table tableName="PKFields" domainObjectName="MyObject" alias="A" >

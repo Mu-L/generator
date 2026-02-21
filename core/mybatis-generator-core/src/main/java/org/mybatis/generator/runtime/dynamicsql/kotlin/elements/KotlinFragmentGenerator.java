@@ -30,6 +30,8 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
 import org.mybatis.generator.api.dom.kotlin.JavaToKotlinTypeConverter;
 import org.mybatis.generator.api.dom.kotlin.KotlinArg;
+import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.dynamicsql.kotlin.KotlinDynamicSqlSupportClassGenerator;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 
@@ -39,12 +41,15 @@ public class KotlinFragmentGenerator {
     private final String resultMapId;
     private final String supportObjectImport;
     private final String tableFieldName;
+    private final boolean useSnakeCase;
 
     private KotlinFragmentGenerator(Builder builder) {
         introspectedTable = Objects.requireNonNull(builder.introspectedTable);
         resultMapId = Objects.requireNonNull(builder.resultMapId);
         supportObjectImport = Objects.requireNonNull(builder.supportObjectImport);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
+        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE,
+                introspectedTable);
     }
 
     public KotlinFunctionParts getPrimaryKeyWhereClauseAndParameters(boolean forUpdate) {
@@ -57,7 +62,11 @@ public class KotlinFragmentGenerator {
             if (forUpdate) {
                 argName = "row." + column.getJavaProperty() + "!!"; //$NON-NLS-1$ //$NON-NLS-2$
             } else {
-                argName = column.getJavaProperty() + "_"; //$NON-NLS-1$
+                String propertyName = column.getJavaProperty();
+                if (!useSnakeCase) {
+                    propertyName += "_"; //$NON-NLS-1$
+                }
+                argName = propertyName;
                 FullyQualifiedKotlinType kt = JavaToKotlinTypeConverter.convert(column.getFullyQualifiedJavaType());
                 builder.withImports(kt.getImportList());
                 builder.withArgument(KotlinArg.newArg(argName)
@@ -67,7 +76,7 @@ public class KotlinFragmentGenerator {
 
             AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
                     AbstractKotlinMapperFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
-                    supportObjectImport, column);
+                    supportObjectImport, column, useSnakeCase);
 
             builder.withImport(fieldNameAndImport.importString());
             if (columnCount == 1) {
@@ -184,7 +193,7 @@ public class KotlinFragmentGenerator {
         for (IntrospectedColumn column : columns) {
             AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
                     AbstractKotlinMapperFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
-                            supportObjectImport, column);
+                            supportObjectImport, column, useSnakeCase);
             builder.withImport(fieldNameAndImport.importString());
 
             builder.withCodeLine("    set(" + fieldNameAndImport.fieldName() //$NON-NLS-1$
@@ -202,7 +211,7 @@ public class KotlinFragmentGenerator {
         for (IntrospectedColumn column : columns) {
             AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
                     AbstractKotlinMapperFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
-                            supportObjectImport, column);
+                            supportObjectImport, column, useSnakeCase);
             builder.withImport(fieldNameAndImport.importString());
 
             builder.withCodeLine("    set(" + fieldNameAndImport.fieldName() //$NON-NLS-1$

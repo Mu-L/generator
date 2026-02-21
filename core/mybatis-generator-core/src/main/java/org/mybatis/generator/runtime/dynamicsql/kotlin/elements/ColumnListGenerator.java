@@ -26,6 +26,8 @@ import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinModifier;
 import org.mybatis.generator.api.dom.kotlin.KotlinProperty;
 import org.mybatis.generator.codegen.AbstractGenerator;
+import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.dynamicsql.kotlin.elements.AbstractKotlinMapperFunctionGenerator.FieldNameAndImport;
 
 public class ColumnListGenerator extends AbstractGenerator {
@@ -58,8 +60,10 @@ public class ColumnListGenerator extends AbstractGenerator {
     }
 
     private FieldNameAndImport calculateFieldAndImport(IntrospectedColumn column) {
+        boolean useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE,
+                introspectedTable);
         return AbstractKotlinMapperFunctionGenerator
-                .calculateFieldNameAndImport(tableFieldName, supportObjectImport, column);
+                .calculateFieldNameAndImport(tableFieldName, supportObjectImport, column, useSnakeCase);
     }
 
     private String getInitializationString(List<FieldNameAndImport> fieldsAndImports) {
