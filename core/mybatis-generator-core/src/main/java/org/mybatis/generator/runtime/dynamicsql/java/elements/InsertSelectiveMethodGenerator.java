@@ -27,25 +27,21 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 import org.mybatis.generator.runtime.AbstractJavaInterfaceMethodGenerator;
-import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.JavaMethodAndImports;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 
 public class InsertSelectiveMethodGenerator extends AbstractJavaInterfaceMethodGenerator {
     private final FullyQualifiedJavaType recordType;
     private final String tableFieldName;
-    private final boolean useSnakeCase;
+    private final FragmentGenerator fragmentGenerator;
 
     private InsertSelectiveMethodGenerator(Builder builder) {
         super(builder);
         recordType = Objects.requireNonNull(builder.recordType);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS,
-                introspectedTable);
+        fragmentGenerator = Objects.requireNonNull(builder.fragmentGenerator);
     }
 
     @Override
@@ -68,7 +64,7 @@ public class InsertSelectiveMethodGenerator extends AbstractJavaInterfaceMethodG
                 introspectedTable.getAllColumns());
         boolean first = true;
         for (IntrospectedColumn column : columns) {
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
+            String fieldName = fragmentGenerator.calculateFieldName(tableFieldName, column);
             if (column.isSequenceColumn()) {
                 if (first) {
                     method.addBodyLine("    c.map(" + fieldName //$NON-NLS-1$
@@ -114,6 +110,7 @@ public class InsertSelectiveMethodGenerator extends AbstractJavaInterfaceMethodG
     public static class Builder extends AbstractGeneratorBuilder<Builder> {
         private @Nullable FullyQualifiedJavaType recordType;
         private @Nullable String tableFieldName;
+        private @Nullable FragmentGenerator fragmentGenerator;
 
         public Builder withRecordType(FullyQualifiedJavaType recordType) {
             this.recordType = recordType;
@@ -122,6 +119,11 @@ public class InsertSelectiveMethodGenerator extends AbstractJavaInterfaceMethodG
 
         public Builder withTableFieldName(String tableFieldName) {
             this.tableFieldName = tableFieldName;
+            return this;
+        }
+
+        public Builder withFragmentGenerator(FragmentGenerator fragmentGenerator) {
+            this.fragmentGenerator = fragmentGenerator;
             return this;
         }
 

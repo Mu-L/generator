@@ -35,8 +35,12 @@ import org.mybatis.generator.internal.util.messages.Messages;
 import org.mybatis.generator.runtime.CodeGenUtils;
 
 public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
+    private final boolean useSnakeCase;
+
     private DynamicSqlSupportClassGenerator(Builder builder) {
         super(builder);
+        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable);
     }
 
     public TopLevelClass generate() {
@@ -96,8 +100,7 @@ public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
                 new FullyQualifiedJavaType(introspectedTable.getMyBatisDynamicSQLTableObjectName());
         String fieldName =
                 JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
-        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
+        if (useSnakeCase) {
             fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
         }
 
@@ -126,8 +129,7 @@ public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
 
         FullyQualifiedJavaType fieldType = calculateFieldType(javaType);
         String fieldName = column.getJavaProperty();
-        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
+        if (useSnakeCase) {
             fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
         }
 

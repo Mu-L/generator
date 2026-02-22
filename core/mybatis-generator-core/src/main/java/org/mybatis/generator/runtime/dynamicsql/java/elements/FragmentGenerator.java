@@ -30,11 +30,9 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
-import org.mybatis.generator.runtime.CodeGenUtils;
+import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.runtime.JavaMethodParts;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 
 public class FragmentGenerator {
@@ -42,19 +40,31 @@ public class FragmentGenerator {
     private final IntrospectedTable introspectedTable;
     private final String resultMapId;
     private final String tableFieldName;
-    private final boolean useSnakeCase;
+    protected final boolean useSnakeCase;
 
     private FragmentGenerator(Builder builder) {
         this.introspectedTable = Objects.requireNonNull(builder.introspectedTable);
         this.resultMapId = Objects.requireNonNull(builder.resultMapId);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS,
-                introspectedTable);
+        useSnakeCase = builder.useSnakeCase;
+    }
+
+    public String calculateFieldName(String tableFieldName, IntrospectedColumn column) {
+        String fieldName = column.getJavaProperty();
+        if (useSnakeCase) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
+
+        if (fieldName.equals(tableFieldName)) {
+            // name collision, no shortcut generated
+            fieldName = tableFieldName + "." + fieldName; //$NON-NLS-1$
+        }
+        return fieldName;
     }
 
     public String getSelectList() {
         return introspectedTable.getAllColumns().stream()
-                .map(c -> DynamicSqlUtils.calculateFieldName(tableFieldName, c, useSnakeCase))
+                .map(c -> calculateFieldName(tableFieldName, c))
                 .collect(Collectors.joining(", ")); //$NON-NLS-1$
     }
 
@@ -68,7 +78,7 @@ public class FragmentGenerator {
                 parameterName += "_"; //$NON-NLS-1$
             }
 
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
+            String fieldName = calculateFieldName(tableFieldName, column);
             builder.withImport(column.getFullyQualifiedJavaType());
             builder.withParameter(new Parameter(column.getFullyQualifiedJavaType(), parameterName));
             if (first) {
@@ -92,7 +102,7 @@ public class FragmentGenerator {
 
         boolean first = true;
         for (IntrospectedColumn column : introspectedTable.getPrimaryKeyColumns()) {
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
+            String fieldName = calculateFieldName(tableFieldName, column);
             String methodName = JavaBeansUtil.getCallingGetterMethodName(column);
             if (first) {
                 lines.add(prefix + ".where(" + fieldName //$NON-NLS-1$
@@ -239,7 +249,7 @@ public class FragmentGenerator {
         boolean first = true;
         while (iter.hasNext()) {
             IntrospectedColumn column = iter.next();
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
+            String fieldName = calculateFieldName(tableFieldName, column);
             String methodName = JavaBeansUtil.getCallingGetterMethodName(column);
 
             String start;
@@ -273,6 +283,7 @@ public class FragmentGenerator {
         private @Nullable IntrospectedTable introspectedTable;
         private @Nullable String resultMapId;
         private @Nullable String tableFieldName;
+        private boolean useSnakeCase;
 
         public Builder withIntrospectedTable(IntrospectedTable introspectedTable) {
             this.introspectedTable = introspectedTable;
@@ -286,6 +297,11 @@ public class FragmentGenerator {
 
         public Builder withTableFieldName(String tableFieldName) {
             this.tableFieldName = tableFieldName;
+            return this;
+        }
+
+        public Builder useSnakeCase(boolean useSnakeCase) {
+            this.useSnakeCase = useSnakeCase;
             return this;
         }
 

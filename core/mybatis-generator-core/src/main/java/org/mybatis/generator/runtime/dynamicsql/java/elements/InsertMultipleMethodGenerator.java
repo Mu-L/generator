@@ -27,9 +27,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.runtime.AbstractJavaInterfaceMethodGenerator;
-import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.JavaMethodAndImports;
 import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
@@ -37,14 +35,13 @@ import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 public class InsertMultipleMethodGenerator extends AbstractJavaInterfaceMethodGenerator {
     private final FullyQualifiedJavaType recordType;
     private final String tableFieldName;
-    private final boolean useSnakeCase;
+    private final FragmentGenerator fragmentGenerator;
 
     private InsertMultipleMethodGenerator(Builder builder) {
         super(builder);
         recordType = Objects.requireNonNull(builder.recordType);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS,
-                introspectedTable);
+        fragmentGenerator = Objects.requireNonNull(builder.fragmentGenerator);
     }
 
     @Override
@@ -84,7 +81,7 @@ public class InsertMultipleMethodGenerator extends AbstractJavaInterfaceMethodGe
                 ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
         boolean first = true;
         for (IntrospectedColumn column : columns) {
-            String fieldName = DynamicSqlUtils.calculateFieldName(tableFieldName, column, useSnakeCase);
+            String fieldName = fragmentGenerator.calculateFieldName(tableFieldName, column);
 
             if (first) {
                 method.addBodyLine("    c.map(" + fieldName //$NON-NLS-1$
@@ -115,6 +112,7 @@ public class InsertMultipleMethodGenerator extends AbstractJavaInterfaceMethodGe
     public static class Builder extends AbstractGeneratorBuilder<Builder> {
         private @Nullable FullyQualifiedJavaType recordType;
         private @Nullable String tableFieldName;
+        private @Nullable FragmentGenerator fragmentGenerator;
 
         public Builder withRecordType(FullyQualifiedJavaType recordType) {
             this.recordType = recordType;
@@ -123,6 +121,11 @@ public class InsertMultipleMethodGenerator extends AbstractJavaInterfaceMethodGe
 
         public Builder withTableFieldName(String tableFieldName) {
             this.tableFieldName = tableFieldName;
+            return this;
+        }
+
+        public Builder withFragmentGenerator(FragmentGenerator fragmentGenerator) {
+            this.fragmentGenerator = Objects.requireNonNull(fragmentGenerator);
             return this;
         }
 

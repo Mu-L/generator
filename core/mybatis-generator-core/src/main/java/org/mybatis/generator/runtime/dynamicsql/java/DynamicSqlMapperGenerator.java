@@ -70,21 +70,28 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
 
         recordType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         resultMapId = recordType.getShortNameWithoutTypeArguments() + "Result"; //$NON-NLS-1$
-        String s =  JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
-        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
-            tableFieldName = StringUtility.convertCamelCaseToSnakeCase(s);
-        } else {
-            tableFieldName = s;
-        }
+        boolean useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable);
 
+        tableFieldName = calculateTableFieldName(useSnakeCase);
         fragmentGenerator = new FragmentGenerator.Builder()
                 .withIntrospectedTable(introspectedTable)
                 .withResultMapId(resultMapId)
                 .withTableFieldName(tableFieldName)
+                .useSnakeCase(useSnakeCase)
                 .build();
 
         hasGeneratedKeys = introspectedTable.getGeneratedKey().isPresent();
+    }
+
+    private String calculateTableFieldName(boolean useSnakeCase) {
+        String tableObjectName =
+                JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
+        if (useSnakeCase) {
+            return StringUtility.convertCamelCaseToSnakeCase(tableObjectName);
+        } else {
+            return tableObjectName;
+        }
     }
 
     @Override
@@ -158,6 +165,7 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
         var generator = initializeSubBuilder(new InsertMethodGenerator.Builder())
                 .withTableFieldName(tableFieldName)
                 .withRecordType(recordType)
+                .withFragmentGenerator(fragmentGenerator)
                 .build();
 
         if (CodeGenUtils.executeInterfaceMethodGenerator(interfaze, generator) && !hasGeneratedKeys) {
@@ -188,6 +196,7 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
         var generator = initializeSubBuilder(new InsertMultipleMethodGenerator.Builder())
                 .withTableFieldName(tableFieldName)
                 .withRecordType(recordType)
+                .withFragmentGenerator(fragmentGenerator)
                 .build();
 
         if (CodeGenUtils.executeInterfaceMethodGenerator(interfaze, generator) && !hasGeneratedKeys) {
@@ -319,6 +328,7 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
         var generator = initializeSubBuilder(new InsertSelectiveMethodGenerator.Builder())
                 .withTableFieldName(tableFieldName)
                 .withRecordType(recordType)
+                .withFragmentGenerator(fragmentGenerator)
                 .build();
 
         if (CodeGenUtils.executeInterfaceMethodGenerator(interfaze, generator) && !hasGeneratedKeys) {
