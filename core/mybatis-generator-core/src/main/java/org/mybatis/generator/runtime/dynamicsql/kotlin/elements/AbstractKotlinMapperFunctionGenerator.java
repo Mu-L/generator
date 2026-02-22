@@ -18,23 +18,16 @@ package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 import java.util.Objects;
 
 import org.jspecify.annotations.Nullable;
-import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.kotlin.KotlinArg;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.runtime.AbstractKotlinFunctionGenerator;
-import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
 
 public abstract class AbstractKotlinMapperFunctionGenerator extends AbstractKotlinFunctionGenerator {
     protected final String tableFieldName;
-    protected final boolean useSnakeCase;
 
     protected AbstractKotlinMapperFunctionGenerator(BaseBuilder<?> builder) {
         super(builder);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS,
-                introspectedTable);
     }
 
     protected void acceptParts(KotlinFunctionAndImports functionAndImports, KotlinFunctionParts functionParts) {
@@ -54,25 +47,6 @@ public abstract class AbstractKotlinMapperFunctionGenerator extends AbstractKotl
         commentGenerator.addGeneralFunctionComment(functionAndImports.getFunction(), introspectedTable,
                 functionAndImports.getImports());
     }
-
-    public static FieldNameAndImport calculateFieldNameAndImport(String tableFieldName, String supportObjectImport,
-                                                                 IntrospectedColumn column, boolean useSnakeCase) {
-        String fieldName = column.getJavaProperty();
-        if (useSnakeCase) {
-            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
-        }
-        String importString;
-        if (fieldName.equals(tableFieldName)) {
-            // name collision, no shortcut generated
-            fieldName = tableFieldName + "." + fieldName; //$NON-NLS-1$
-            importString = supportObjectImport + "." + tableFieldName; //$NON-NLS-1$
-        } else {
-            importString = supportObjectImport + "." + fieldName; //$NON-NLS-1$
-        }
-        return new FieldNameAndImport(fieldName, importString);
-    }
-
-    public record FieldNameAndImport(String fieldName, String importString) { }
 
     public abstract static class BaseBuilder<T extends BaseBuilder<T>> extends AbstractGeneratorBuilder<T> {
         private @Nullable String tableFieldName;

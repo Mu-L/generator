@@ -39,9 +39,12 @@ public class KotlinDynamicSqlSupportClassGenerator extends AbstractGenerator {
     private KotlinType innerClass;
     private KotlinType outerObject;
     private KotlinProperty tableProperty;
+    private final boolean useSnakeCase;
 
     public KotlinDynamicSqlSupportClassGenerator(Builder builder) {
         super(builder);
+        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(
+                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable);
         generate();
     }
 
@@ -125,8 +128,7 @@ public class KotlinDynamicSqlSupportClassGenerator extends AbstractGenerator {
     private KotlinProperty calculateTableProperty() {
         String tableType = introspectedTable.getMyBatisDynamicSQLTableObjectName();
         String fieldName =  JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
-        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
+        if (useSnakeCase) {
             fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
         }
 
@@ -143,8 +145,7 @@ public class KotlinDynamicSqlSupportClassGenerator extends AbstractGenerator {
         kotlinFile.addImports(kt.getImportList());
 
         String fieldName = column.getJavaProperty();
-        if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
+        if (useSnakeCase) {
             fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
         }
 

@@ -31,6 +31,7 @@ import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
 import org.mybatis.generator.api.dom.kotlin.JavaToKotlinTypeConverter;
 import org.mybatis.generator.api.dom.kotlin.KotlinArg;
 import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.runtime.CodeGenUtils;
 import org.mybatis.generator.runtime.dynamicsql.kotlin.KotlinDynamicSqlSupportClassGenerator;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
@@ -74,9 +75,8 @@ public class KotlinFragmentGenerator {
                         .build());
             }
 
-            AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
-                    AbstractKotlinMapperFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
-                    supportObjectImport, column, useSnakeCase);
+            FieldNameAndImport fieldNameAndImport = calculateFieldNameAndImport(tableFieldName, supportObjectImport,
+                    column);
 
             builder.withImport(fieldNameAndImport.importString());
             if (columnCount == 1) {
@@ -191,9 +191,8 @@ public class KotlinFragmentGenerator {
 
         List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(columnList);
         for (IntrospectedColumn column : columns) {
-            AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
-                    AbstractKotlinMapperFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
-                            supportObjectImport, column, useSnakeCase);
+            FieldNameAndImport fieldNameAndImport = calculateFieldNameAndImport(tableFieldName, supportObjectImport,
+                    column);
             builder.withImport(fieldNameAndImport.importString());
 
             builder.withCodeLine("    set(" + fieldNameAndImport.fieldName() //$NON-NLS-1$
@@ -209,9 +208,8 @@ public class KotlinFragmentGenerator {
 
         List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(columnList);
         for (IntrospectedColumn column : columns) {
-            AbstractKotlinMapperFunctionGenerator.FieldNameAndImport fieldNameAndImport =
-                    AbstractKotlinMapperFunctionGenerator.calculateFieldNameAndImport(tableFieldName,
-                            supportObjectImport, column, useSnakeCase);
+            FieldNameAndImport fieldNameAndImport = calculateFieldNameAndImport(tableFieldName, supportObjectImport,
+                    column);
             builder.withImport(fieldNameAndImport.importString());
 
             builder.withCodeLine("    set(" + fieldNameAndImport.fieldName() //$NON-NLS-1$
@@ -220,6 +218,25 @@ public class KotlinFragmentGenerator {
 
         return builder.build();
     }
+
+    public FieldNameAndImport calculateFieldNameAndImport(String tableFieldName, String supportObjectImport,
+                                                          IntrospectedColumn column) {
+        String fieldName = column.getJavaProperty();
+        if (useSnakeCase) {
+            fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
+        }
+        String importString;
+        if (fieldName.equals(tableFieldName)) {
+            // name collision, no shortcut generated
+            fieldName = tableFieldName + "." + fieldName; //$NON-NLS-1$
+            importString = supportObjectImport + "." + tableFieldName; //$NON-NLS-1$
+        } else {
+            importString = supportObjectImport + "." + fieldName; //$NON-NLS-1$
+        }
+        return new FieldNameAndImport(fieldName, importString);
+    }
+
+    public record FieldNameAndImport(String fieldName, String importString) { }
 
     public static class Builder {
         private @Nullable IntrospectedTable introspectedTable;
