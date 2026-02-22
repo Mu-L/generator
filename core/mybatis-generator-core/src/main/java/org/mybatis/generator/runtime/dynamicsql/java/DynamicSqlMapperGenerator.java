@@ -85,13 +85,13 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
     }
 
     private String calculateTableFieldName(boolean useSnakeCase) {
-        String tableObjectName =
+        String tableFieldName =
                 JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
         if (useSnakeCase) {
-            return StringUtility.convertCamelCaseToSnakeCase(tableObjectName);
-        } else {
-            return tableObjectName;
+            tableFieldName = StringUtility.convertCamelCaseToSnakeCase(tableFieldName);
         }
+
+        return tableFieldName;
     }
 
     @Override
