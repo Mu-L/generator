@@ -73,7 +73,7 @@
     </table>
     <table schema="mbgtest" tableName="Translations" domainObjectName="Translation"/>
     <table schema="mbgtest" tableName="Ids" domainObjectName="Id">
-      <property name="dynamicSqlUseSnakeCase" value="true"/>
+      <property name="useSnakeCaseIdentifiers" value="true"/>
     </table>
   </context>
 
@@ -136,7 +136,7 @@
     </javaModelGenerator>
 
     <javaClientGenerator targetPackage="mbg.test.mb3.generated.dsql.kotlin.miscellaneous.mapper"  targetProject="MAVEN">
-      <property name="dynamicSqlUseSnakeCase" value="true"/>
+      <property name="useSnakeCaseIdentifiers" value="true"/>
     </javaClientGenerator>
 
     <table tableName="PKFields" domainObjectName="MyObject" alias="A" >

@@ -75,7 +75,7 @@
     <table schema="mbgtest" tableName="Translations" domainObjectName="sub.Translation"/>
     <table schema="mbgtest" tableName="Ids" domainObjectName="Id" modelType="record">
       <property name="dynamicSqlSupportClassName" value="sub.IdDSQLSupport"/>
-      <property name="dynamicSqlUseSnakeCase" value="true"/>
+      <property name="useSnakeCaseIdentifiers" value="true"/>
     </table>
   </context>
 
@@ -95,7 +95,7 @@
 
     <javaClientGenerator targetPackage="mbg.test.mb3.generated.dsql.record.mapper"  targetProject="MAVEN">
       <property name="enableSubPackages" value="true" />
-      <property name="dynamicSqlUseSnakeCase" value="true" />
+      <property name="useSnakeCaseIdentifiers" value="true" />
     </javaClientGenerator>
 
     <table tableName="FieldsOnly" enableSelectByExample="false"/>
@@ -225,7 +225,7 @@
       <columnOverride column="name" javaType="mbg.test.mb3.common.TestEnum" jdbcType="INTEGER"
                       typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" >
         <property name="forceJavaTypeIntoMapping" value="true" />
-        <property name="dynamicSqlUseSnakeCase" value="true"/>
+        <property name="useSnakeCaseIdentifiers" value="true"/>
       </columnOverride>
     </table>
     <table tableName="GeneratedAlwaysTest" >

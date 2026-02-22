@@ -60,7 +60,7 @@ public class ColumnListGenerator extends AbstractGenerator {
     }
 
     private FieldNameAndImport calculateFieldAndImport(IntrospectedColumn column) {
-        boolean useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE,
+        boolean useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS,
                 introspectedTable);
         return AbstractKotlinMapperFunctionGenerator
                 .calculateFieldNameAndImport(tableFieldName, supportObjectImport, column, useSnakeCase);

@@ -40,7 +40,7 @@ public class PropertyRegistry {
      */
     public static final String ANY_ROOT_INTERFACE = "rootInterface"; //$NON-NLS-1$
     public static final String ANY_INJECT_MODEL_INTO_ROOT_INTERFACE = "injectModelIntoRootInterface"; //$NON-NLS-1$
-    public static final String ANY_DYNAMIC_SQL_USE_SNAKE_CASE = "dynamicSqlUseSnakeCase"; //$NON-NLS-1$
+    public static final String ANY_USE_SNAKE_CASE_IDENTIFIERS = "useSnakeCaseIdentifiers"; //$NON-NLS-1$
 
     public static final String TABLE_USE_COLUMN_INDEXES = "useColumnIndexes"; //$NON-NLS-1$
     public static final String TABLE_USE_ACTUAL_COLUMN_NAMES = "useActualColumnNames"; //$NON-NLS-1$

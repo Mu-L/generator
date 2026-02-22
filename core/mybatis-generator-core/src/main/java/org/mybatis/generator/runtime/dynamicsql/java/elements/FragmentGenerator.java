@@ -48,7 +48,7 @@ public class FragmentGenerator {
         this.introspectedTable = Objects.requireNonNull(builder.introspectedTable);
         this.resultMapId = Objects.requireNonNull(builder.resultMapId);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE,
+        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS,
                 introspectedTable);
     }
 

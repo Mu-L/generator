@@ -33,7 +33,7 @@ public abstract class AbstractKotlinMapperFunctionGenerator extends AbstractKotl
     protected AbstractKotlinMapperFunctionGenerator(BaseBuilder<?> builder) {
         super(builder);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE,
+        useSnakeCase = CodeGenUtils.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS,
                 introspectedTable);
     }
 

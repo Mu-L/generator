@@ -72,7 +72,7 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
         resultMapId = recordType.getShortNameWithoutTypeArguments() + "Result"; //$NON-NLS-1$
         String s =  JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
         if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
             tableFieldName = StringUtility.convertCamelCaseToSnakeCase(s);
         } else {
             tableFieldName = s;

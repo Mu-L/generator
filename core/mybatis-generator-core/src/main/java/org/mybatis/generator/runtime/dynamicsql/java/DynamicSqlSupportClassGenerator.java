@@ -97,7 +97,7 @@ public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
         String fieldName =
                 JavaBeansUtil.getValidPropertyName(introspectedTable.getMyBatisDynamicSQLTableObjectName());
         if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
             fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
         }
 
@@ -127,7 +127,7 @@ public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
         FullyQualifiedJavaType fieldType = calculateFieldType(javaType);
         String fieldName = column.getJavaProperty();
         if (CodeGenUtils.findTableOrClientPropertyAsBoolean(
-                PropertyRegistry.ANY_DYNAMIC_SQL_USE_SNAKE_CASE, introspectedTable)) {
+                PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS, introspectedTable)) {
             fieldName = StringUtility.convertCamelCaseToSnakeCase(fieldName);
         }
 
