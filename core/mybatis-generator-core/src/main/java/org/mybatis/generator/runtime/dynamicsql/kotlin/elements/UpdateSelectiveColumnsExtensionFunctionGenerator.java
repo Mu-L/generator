@@ -42,7 +42,8 @@ public class UpdateSelectiveColumnsExtensionFunctionGenerator extends AbstractKo
         Set<String> imports = new HashSet<>();
         imports.add("org.mybatis.dynamic.sql.util.kotlin.KotlinUpdateBuilder"); //$NON-NLS-1$
 
-        KotlinFunction function = KotlinFunction.newOneLineFunction("KotlinUpdateBuilder.updateSelectiveColumns") //$NON-NLS-1$
+        KotlinFunction function = KotlinFunction
+                .newOneLineFunction("KotlinUpdateBuilder.updateSelectiveColumns") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("row") //$NON-NLS-1$
                         .withDataType(recordType.getShortNameWithTypeArguments())
                         .build())
@@ -54,7 +55,8 @@ public class UpdateSelectiveColumnsExtensionFunctionGenerator extends AbstractKo
         return KotlinFunctionAndImports.withFunction(function)
                 .withImports(imports)
                 .withImports(recordType.getImportList())
-                .withExtraFunctionParts(fragmentGenerator.getSetEqualWhenPresentLines(introspectedTable.getAllColumns(), true))
+                .withExtraFunctionParts(fragmentGenerator.getSetEqualWhenPresentLines(introspectedTable.getAllColumns(),
+                        true))
                 .buildOptional();
     }
 

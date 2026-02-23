@@ -47,7 +47,8 @@ public class UpdateByPrimaryKeySelectiveExtensionFunctionGenerator extends Abstr
 
         Set<String> imports = new HashSet<>();
 
-        KotlinFunction function = KotlinFunction.newOneLineFunction(mapperName + ".updateByPrimaryKeySelective") //$NON-NLS-1$
+        KotlinFunction function = KotlinFunction
+                .newOneLineFunction(mapperName + ".updateByPrimaryKeySelective") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("row") //$NON-NLS-1$
                         .withDataType(recordType.getShortNameWithTypeArguments())
                         .build())
@@ -59,7 +60,8 @@ public class UpdateByPrimaryKeySelectiveExtensionFunctionGenerator extends Abstr
         return KotlinFunctionAndImports.withFunction(function)
                 .withImports(imports)
                 .withImports(recordType.getImportList())
-                .withExtraFunctionParts(fragmentGenerator.getSetEqualWhenPresentLines(introspectedTable.getNonPrimaryKeyColumns(), false))
+                .withExtraFunctionParts(fragmentGenerator.getSetEqualWhenPresentLines(
+                        introspectedTable.getNonPrimaryKeyColumns(), false))
                 .withExtraFunctionParts(fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(true))
                 .buildOptional();
     }

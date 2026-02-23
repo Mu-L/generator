@@ -68,34 +68,34 @@ public class SimpleJavaMapperGenerator extends AbstractJavaGenerator {
     }
 
     protected void addDeleteByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new DeleteByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new DeleteByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(true)
                 .build()
                 .execute(interfaze);
     }
 
     protected void addInsertMethod(Interface interfaze) {
-         initializeSubBuilder(new InsertMethodGenerator.Builder())
+        initializeSubBuilder(new InsertMethodGenerator.Builder())
                 .isSimple(true)
                 .build()
                 .execute(interfaze);
     }
 
     protected void addSelectByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new SelectByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new SelectByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(true)
                 .build()
                 .execute(interfaze);
     }
 
     protected void addSelectAllMethod(Interface interfaze) {
-         initializeSubBuilder(new SelectAllMethodGenerator.Builder())
+        initializeSubBuilder(new SelectAllMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addUpdateByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new UpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new UpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
                 .isSimple(true)
                 .build()
                 .execute(interfaze);

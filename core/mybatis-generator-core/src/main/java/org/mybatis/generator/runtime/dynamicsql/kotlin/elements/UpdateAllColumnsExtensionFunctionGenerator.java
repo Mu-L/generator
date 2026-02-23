@@ -42,7 +42,8 @@ public class UpdateAllColumnsExtensionFunctionGenerator extends AbstractKotlinMa
         Set<String> imports = new HashSet<>();
         imports.add("org.mybatis.dynamic.sql.util.kotlin.KotlinUpdateBuilder"); //$NON-NLS-1$
 
-        KotlinFunction function = KotlinFunction.newOneLineFunction("KotlinUpdateBuilder.updateAllColumns") //$NON-NLS-1$
+        KotlinFunction function = KotlinFunction
+                .newOneLineFunction("KotlinUpdateBuilder.updateAllColumns") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("row") //$NON-NLS-1$
                         .withDataType(recordType.getShortNameWithTypeArguments())
                         .build())

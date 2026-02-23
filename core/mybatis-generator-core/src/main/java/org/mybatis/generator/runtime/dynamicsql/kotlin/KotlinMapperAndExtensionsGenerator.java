@@ -340,7 +340,8 @@ public class KotlinMapperAndExtensionsGenerator extends AbstractKotlinGenerator 
                 .execute(mapperFile);
     }
 
-    protected void addInsertSelectiveExtensionFunction(KotlinFile mapperFile, KotlinType mapperType, String mapperName) {
+    protected void addInsertSelectiveExtensionFunction(KotlinFile mapperFile, KotlinType mapperType,
+                                                       String mapperName) {
         var generated = initializeSubBuilder(new InsertSelectiveExtensionFunctionGenerator.Builder())
                 .withTableFieldName(supportClassGenerator.getTablePropertyName())
                 .withRecordType(recordType)

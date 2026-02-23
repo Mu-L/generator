@@ -86,88 +86,88 @@ public class JavaMapperGenerator extends AbstractJavaGenerator {
     }
 
     protected void addCountByExampleMethod(Interface interfaze) {
-         initializeSubBuilder(new CountByExampleMethodGenerator.Builder())
+        initializeSubBuilder(new CountByExampleMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addDeleteByExampleMethod(Interface interfaze) {
-         initializeSubBuilder(new DeleteByExampleMethodGenerator.Builder())
+        initializeSubBuilder(new DeleteByExampleMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addDeleteByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new DeleteByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new DeleteByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(false)
                 .build()
                 .execute(interfaze);
     }
 
     protected void addInsertMethod(Interface interfaze) {
-         initializeSubBuilder(new InsertMethodGenerator.Builder())
+        initializeSubBuilder(new InsertMethodGenerator.Builder())
                 .isSimple(false)
                 .build()
                 .execute(interfaze);
     }
 
     protected void addInsertSelectiveMethod(Interface interfaze) {
-         initializeSubBuilder(new InsertSelectiveMethodGenerator.Builder())
+        initializeSubBuilder(new InsertSelectiveMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addSelectByExampleWithBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new SelectByExampleWithBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new SelectByExampleWithBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addSelectByExampleWithoutBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new SelectByExampleWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new SelectByExampleWithoutBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addSelectByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new SelectByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new SelectByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(false)
                 .build()
                 .execute(interfaze);
     }
 
     protected void addUpdateByExampleSelectiveMethod(Interface interfaze) {
-         initializeSubBuilder(new UpdateByExampleSelectiveMethodGenerator.Builder())
+        initializeSubBuilder(new UpdateByExampleSelectiveMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addUpdateByExampleWithBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new UpdateByExampleWithBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new UpdateByExampleWithBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addUpdateByExampleWithoutBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new UpdateByExampleWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new UpdateByExampleWithoutBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addUpdateByPrimaryKeySelectiveMethod(Interface interfaze) {
-         initializeSubBuilder(new UpdateByPrimaryKeySelectiveMethodGenerator.Builder())
+        initializeSubBuilder(new UpdateByPrimaryKeySelectiveMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addUpdateByPrimaryKeyWithBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new UpdateByPrimaryKeyWithBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new UpdateByPrimaryKeyWithBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     protected void addUpdateByPrimaryKeyWithoutBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new UpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new UpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }

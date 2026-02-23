@@ -42,21 +42,21 @@ public class AnnotatedMapperGenerator extends JavaMapperGenerator {
 
     @Override
     protected void addCountByExampleMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedCountByExampleMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedCountByExampleMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addDeleteByExampleMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedDeleteByExampleMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedDeleteByExampleMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addDeleteByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedDeleteByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedDeleteByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(false)
                 .build()
                 .execute(interfaze);
@@ -64,7 +64,7 @@ public class AnnotatedMapperGenerator extends JavaMapperGenerator {
 
     @Override
     protected void addInsertMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedInsertMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedInsertMethodGenerator.Builder())
                 .isSimple(false)
                 .build()
                 .execute(interfaze);
@@ -72,28 +72,28 @@ public class AnnotatedMapperGenerator extends JavaMapperGenerator {
 
     @Override
     protected void addInsertSelectiveMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedInsertSelectiveMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedInsertSelectiveMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addSelectByExampleWithBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedSelectByExampleWithBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedSelectByExampleWithBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addSelectByExampleWithoutBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedSelectByExampleWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedSelectByExampleWithoutBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addSelectByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedSelectByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedSelectByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(false)
                 .useResultMapIfAvailable(false)
                 .build()
@@ -102,42 +102,42 @@ public class AnnotatedMapperGenerator extends JavaMapperGenerator {
 
     @Override
     protected void addUpdateByExampleSelectiveMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedUpdateByExampleSelectiveMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedUpdateByExampleSelectiveMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addUpdateByExampleWithBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedUpdateByExampleWithBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedUpdateByExampleWithBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addUpdateByExampleWithoutBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedUpdateByExampleWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedUpdateByExampleWithoutBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addUpdateByPrimaryKeySelectiveMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedUpdateByPrimaryKeySelectiveMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedUpdateByPrimaryKeySelectiveMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addUpdateByPrimaryKeyWithBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedUpdateByPrimaryKeyWithBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedUpdateByPrimaryKeyWithBLOBsMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addUpdateByPrimaryKeyWithoutBLOBsMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedUpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedUpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
                 .isSimple(false)
                 .build()
                 .execute(interfaze);

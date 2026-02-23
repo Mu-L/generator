@@ -30,7 +30,7 @@ public class SimpleAnnotatedMapperGenerator extends SimpleJavaMapperGenerator {
 
     @Override
     protected void addDeleteByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedDeleteByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedDeleteByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(true)
                 .build()
                 .execute(interfaze);
@@ -38,7 +38,7 @@ public class SimpleAnnotatedMapperGenerator extends SimpleJavaMapperGenerator {
 
     @Override
     protected void addInsertMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedInsertMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedInsertMethodGenerator.Builder())
                 .isSimple(true)
                 .build()
                 .execute(interfaze);
@@ -46,7 +46,7 @@ public class SimpleAnnotatedMapperGenerator extends SimpleJavaMapperGenerator {
 
     @Override
     protected void addSelectByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedSelectByPrimaryKeyMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedSelectByPrimaryKeyMethodGenerator.Builder())
                 .isSimple(true)
                 .useResultMapIfAvailable(false)
                 .build()
@@ -55,14 +55,14 @@ public class SimpleAnnotatedMapperGenerator extends SimpleJavaMapperGenerator {
 
     @Override
     protected void addSelectAllMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedSelectAllMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedSelectAllMethodGenerator.Builder())
                 .build()
                 .execute(interfaze);
     }
 
     @Override
     protected void addUpdateByPrimaryKeyMethod(Interface interfaze) {
-         initializeSubBuilder(new AnnotatedUpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
+        initializeSubBuilder(new AnnotatedUpdateByPrimaryKeyWithoutBLOBsMethodGenerator.Builder())
                 .isSimple(true)
                 .build()
                 .execute(interfaze);
