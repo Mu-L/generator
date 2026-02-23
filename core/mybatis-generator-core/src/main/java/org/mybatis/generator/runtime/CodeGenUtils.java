@@ -15,7 +15,6 @@
  */
 package org.mybatis.generator.runtime;
 
-import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 
@@ -37,26 +36,4 @@ public class CodeGenUtils {
         method.addBodyLines(javaMethodParts.getBodyLines());
         builder.withImports(javaMethodParts.getImports());
     }
-
-    /**
-     * Executes the given interface method generator, calls plugins, and applies the generated method to the interface.
-     *
-     * @param interfaze The interface to which the method will be added.
-     * @param generator The interface method generator to execute.
-     * @return true if the method was successfully generated and added to the interface, false otherwise.
-     */
-    public static boolean executeInterfaceMethodGenerator(Interface interfaze,
-                                                          AbstractJavaInterfaceMethodGenerator generator) {
-        return generator.generateMethodAndImports()
-                .filter(mi -> generator.callPlugins(mi.getMethod(), interfaze))
-                .map(mi -> {
-                    interfaze.addMethod(mi.getMethod());
-                    interfaze.addImportedTypes(mi.getImports());
-                    interfaze.addStaticImports(mi.getStaticImports());
-                    return true;
-                })
-                .orElse(false);
-    }
-
-
 }
