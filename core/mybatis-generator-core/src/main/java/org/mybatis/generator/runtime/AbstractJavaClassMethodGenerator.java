@@ -32,7 +32,7 @@ public abstract class AbstractJavaClassMethodGenerator extends AbstractGenerator
      * @param topLevelClass The class to which the method will be added.
      * @return true if the method was successfully generated and added to the class, false otherwise.
      */
-    public boolean executeClassMethodGenerator(TopLevelClass topLevelClass) {
+    public boolean execute(TopLevelClass topLevelClass) {
         return generateMethodAndImports()
                 .filter(mi -> callPlugins(mi.getMethod(), topLevelClass))
                 .map(mi -> {

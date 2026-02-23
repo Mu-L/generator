@@ -79,61 +79,61 @@ public class SqlProviderGenerator extends AbstractJavaGenerator {
     protected boolean addCountByExampleMethod(TopLevelClass topLevelClass) {
         return initializeSubBuilder(new ProviderCountByExampleMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected boolean addDeleteByExampleMethod(TopLevelClass topLevelClass) {
         return initializeSubBuilder(new ProviderDeleteByExampleMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected void addInsertSelectiveMethod(TopLevelClass topLevelClass) {
         initializeSubBuilder(new ProviderInsertSelectiveMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected boolean addSelectByExampleWithBLOBsMethod(TopLevelClass topLevelClass) {
         return initializeSubBuilder(new ProviderSelectByExampleWithBLOBsMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected boolean addSelectByExampleWithoutBLOBsMethod(TopLevelClass topLevelClass) {
         return initializeSubBuilder(new ProviderSelectByExampleWithoutBLOBsMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected boolean addUpdateByExampleSelectiveMethod(TopLevelClass topLevelClass) {
         return initializeSubBuilder(new ProviderUpdateByExampleSelectiveMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected boolean addUpdateByExampleWithBLOBsMethod(TopLevelClass topLevelClass) {
         return initializeSubBuilder(new ProviderUpdateByExampleWithBLOBsMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected boolean addUpdateByExampleWithoutBLOBsMethod(TopLevelClass topLevelClass) {
         return initializeSubBuilder(new ProviderUpdateByExampleWithoutBLOBsMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected void addUpdateByPrimaryKeySelectiveMethod(TopLevelClass topLevelClass) {
         initializeSubBuilder(new ProviderUpdateByPrimaryKeySelectiveMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     protected void addApplyWhereMethod(TopLevelClass topLevelClass) {
         initializeSubBuilder(new ProviderApplyWhereMethodGenerator.Builder())
                 .build()
-                .executeClassMethodGenerator(topLevelClass);
+                .execute(topLevelClass);
     }
 
     public static class Builder extends AbstractJavaGeneratorBuilder<Builder> {
