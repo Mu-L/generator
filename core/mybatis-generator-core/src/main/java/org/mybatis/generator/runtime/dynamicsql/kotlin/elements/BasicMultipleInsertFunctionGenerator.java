@@ -62,18 +62,18 @@ public class BasicMultipleInsertFunctionGenerator extends AbstractKotlinMapperFu
                         + " method = \"insertMultipleWithGeneratedKeys\")") //$NON-NLS-1$
                 .build();
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
+        KotlinFunctionAndImports.Builder builder = KotlinFunctionAndImports.withFunction(function)
                 .withImport("org.mybatis.dynamic.sql.util.SqlProviderAdapter") //$NON-NLS-1$
                 .withImport("org.apache.ibatis.annotations.InsertProvider") //$NON-NLS-1$
                 .withImport("org.apache.ibatis.annotations.Param") //$NON-NLS-1$
-                .withImports(recordType.getImportList())
-                .build();
+                .withImports(recordType.getImportList());
 
-        addFunctionComment(functionAndImports);
 
         GeneratedKeyAnnotationUtility.getKotlinMultiRowGeneratedKeyAnnotation(introspectedTable, gk)
-                .ifPresent(functionParts -> acceptParts(functionAndImports, functionParts));
+                .ifPresent(builder::withExtraFunctionParts);
 
+        KotlinFunctionAndImports functionAndImports = builder.build();
+        addFunctionComment(functionAndImports);
         return functionAndImports;
     }
 

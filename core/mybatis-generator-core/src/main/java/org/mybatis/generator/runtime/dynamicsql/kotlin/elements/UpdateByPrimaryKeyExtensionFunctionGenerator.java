@@ -15,12 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.jspecify.annotations.Nullable;
-import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
 import org.mybatis.generator.api.dom.kotlin.KotlinArg;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
@@ -45,26 +43,20 @@ public class UpdateByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlin
             return Optional.empty();
         }
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(
-                KotlinFunction.newOneLineFunction(mapperName + ".updateByPrimaryKey") //$NON-NLS-1$
+        KotlinFunction function = KotlinFunction.newOneLineFunction(mapperName + ".updateByPrimaryKey") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("row") //$NON-NLS-1$
                         .withDataType(recordType.getShortNameWithTypeArguments())
                         .build())
                 .withCodeLine("update {") //$NON-NLS-1$
-                .build())
+                .build();
+
+        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
                 .withImports(recordType.getImportList())
+                .withExtraFunctionParts(fragmentGenerator.getSetEqualLines(introspectedTable.getNonPrimaryKeyColumns(), false))
+                .withExtraFunctionParts(fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(true))
                 .build();
 
         addFunctionComment(functionAndImports);
-
-        List<IntrospectedColumn> columns = introspectedTable.getNonPrimaryKeyColumns();
-        KotlinFunctionParts functionParts = fragmentGenerator.getSetEqualLines(columns);
-        acceptParts(functionAndImports, functionParts);
-
-        functionParts = fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(true);
-        acceptParts(functionAndImports, functionParts);
-        functionAndImports.getFunction().getCodeLines().add("}"); //$NON-NLS-1$
-
         return Optional.of(functionAndImports);
     }
 

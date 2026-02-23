@@ -37,8 +37,7 @@ public class BasicSelectManyFunctionGenerator extends AbstractKotlinMapperFuncti
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(
-                KotlinFunction.newOneLineFunction("selectMany") //$NON-NLS-1$
+        KotlinFunction function = KotlinFunction.newOneLineFunction("selectMany") //$NON-NLS-1$
                 .withExplicitReturnType("List<" //$NON-NLS-1$
                         + recordType.getShortNameWithTypeArguments()
                         + ">") //$NON-NLS-1$
@@ -46,18 +45,17 @@ public class BasicSelectManyFunctionGenerator extends AbstractKotlinMapperFuncti
                         .withDataType("SelectStatementProvider") //$NON-NLS-1$
                         .build())
                 .withAnnotation("@SelectProvider(type=SqlProviderAdapter::class, method=\"select\")") //$NON-NLS-1$
-                .build())
+                .build();
+
+        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
                 .withImport("org.mybatis.dynamic.sql.select.render.SelectStatementProvider") //$NON-NLS-1$
                 .withImport("org.mybatis.dynamic.sql.util.SqlProviderAdapter") //$NON-NLS-1$
                 .withImport("org.apache.ibatis.annotations.SelectProvider") //$NON-NLS-1$
                 .withImports(recordType.getImportList())
+                .withExtraFunctionParts(fragmentGenerator.getAnnotatedResults())
                 .build();
 
         addFunctionComment(functionAndImports);
-
-        KotlinFunctionParts functionParts = fragmentGenerator.getAnnotatedResults();
-        acceptParts(functionAndImports, functionParts);
-
         return Optional.of(functionAndImports);
     }
 

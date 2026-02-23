@@ -39,18 +39,15 @@ public class SelectByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlin
             return Optional.empty();
         }
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(
-                KotlinFunction.newOneLineFunction(mapperName + ".selectByPrimaryKey") //$NON-NLS-1$
+        KotlinFunction function = KotlinFunction.newOneLineFunction(mapperName + ".selectByPrimaryKey") //$NON-NLS-1$
                 .withCodeLine("selectOne {") //$NON-NLS-1$
-                .build())
+                .build();
+
+        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
+                .withExtraFunctionParts(fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(false))
                 .build();
 
         addFunctionComment(functionAndImports);
-
-        KotlinFunctionParts functionParts = fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(false);
-        acceptParts(functionAndImports, functionParts);
-        functionAndImports.getFunction().getCodeLines().add("}"); //$NON-NLS-1$
-
         return Optional.of(functionAndImports);
     }
 

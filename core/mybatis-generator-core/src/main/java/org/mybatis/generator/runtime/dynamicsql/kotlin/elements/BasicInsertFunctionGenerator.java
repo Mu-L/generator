@@ -54,18 +54,17 @@ public class BasicInsertFunctionGenerator extends AbstractKotlinMapperFunctionGe
                 .withAnnotation("@InsertProvider(type=SqlProviderAdapter::class, method=\"insert\")") //$NON-NLS-1$
                 .build();
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
+        KotlinFunctionAndImports.Builder builder = KotlinFunctionAndImports.withFunction(function)
                 .withImport("org.mybatis.dynamic.sql.util.SqlProviderAdapter") //$NON-NLS-1$
                 .withImport("org.apache.ibatis.annotations.InsertProvider") //$NON-NLS-1$
                 .withImport("org.mybatis.dynamic.sql.insert.render.InsertStatementProvider") //$NON-NLS-1$
-                .withImports(recordType.getImportList())
-                .build();
-
-        addFunctionComment(functionAndImports);
+                .withImports(recordType.getImportList());
 
         GeneratedKeyAnnotationUtility.getKotlinSingleRowGeneratedKeyAnnotation(introspectedTable, gk)
-                .ifPresent(functionParts -> acceptParts(functionAndImports, functionParts));
+                .ifPresent(builder::withExtraFunctionParts);
 
+        KotlinFunctionAndImports functionAndImports = builder.build();
+        addFunctionComment(functionAndImports);
         return functionAndImports;
     }
 

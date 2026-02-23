@@ -32,6 +32,7 @@ import org.mybatis.generator.api.dom.kotlin.JavaToKotlinTypeConverter;
 import org.mybatis.generator.api.dom.kotlin.KotlinArg;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.StringUtility;
+import org.mybatis.generator.runtime.KotlinFunctionParts;
 import org.mybatis.generator.runtime.dynamicsql.kotlin.KotlinDynamicSqlSupportClassGenerator;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 
@@ -92,6 +93,8 @@ public class KotlinFragmentGenerator {
         if (columnCount > 1) {
             builder.withCodeLine("    }"); //$NON-NLS-1$
         }
+
+        builder.withCodeLine("}"); //$NON-NLS-1$
 
         return builder.build();
     }
@@ -184,7 +187,7 @@ public class KotlinFragmentGenerator {
         return sb.toString();
     }
 
-    public KotlinFunctionParts getSetEqualLines(List<IntrospectedColumn> columnList) {
+    public KotlinFunctionParts getSetEqualLines(List<IntrospectedColumn> columnList, boolean terminate) {
 
         KotlinFunctionParts.Builder builder = new KotlinFunctionParts.Builder();
 
@@ -198,10 +201,14 @@ public class KotlinFragmentGenerator {
                     + ") equalToOrNull row::" + column.getJavaProperty()); //$NON-NLS-1$
         }
 
+        if (terminate) {
+            builder.withCodeLine("}"); //$NON-NLS-1$
+        }
+
         return builder.build();
     }
 
-    public KotlinFunctionParts getSetEqualWhenPresentLines(List<IntrospectedColumn> columnList) {
+    public KotlinFunctionParts getSetEqualWhenPresentLines(List<IntrospectedColumn> columnList, boolean terminate) {
 
         KotlinFunctionParts.Builder builder = new KotlinFunctionParts.Builder();
 
@@ -213,6 +220,10 @@ public class KotlinFragmentGenerator {
 
             builder.withCodeLine("    set(" + fieldNameAndImport.fieldName() //$NON-NLS-1$
                     + ") equalToWhenPresent row::" + column.getJavaProperty()); //$NON-NLS-1$
+        }
+
+        if (terminate) {
+            builder.withCodeLine("}"); //$NON-NLS-1$
         }
 
         return builder.build();
