@@ -15,8 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
@@ -42,6 +44,11 @@ public class BasicSelectOneFunctionGenerator extends AbstractKotlinMapperFunctio
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
+        Set<String> imports = new HashSet<>();
+        imports.add("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"); //$NON-NLS-1$
+        imports.add("org.mybatis.dynamic.sql.util.SqlProviderAdapter"); //$NON-NLS-1$
+        imports.add("org.apache.ibatis.annotations.SelectProvider"); //$NON-NLS-1$
+
         KotlinFunction function = KotlinFunction.newOneLineFunction("selectOne") //$NON-NLS-1$
                 .withExplicitReturnType(recordType.getShortNameWithTypeArguments() + "?") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("selectStatement") //$NON-NLS-1$
@@ -51,11 +58,11 @@ public class BasicSelectOneFunctionGenerator extends AbstractKotlinMapperFunctio
                         + " method=\"select\")") //$NON-NLS-1$
                 .build();
 
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
+
         KotlinFunctionAndImports.Builder builder = KotlinFunctionAndImports
                 .withFunction(function)
-                .withImport("org.mybatis.dynamic.sql.select.render.SelectStatementProvider") //$NON-NLS-1$
-                .withImport("org.mybatis.dynamic.sql.util.SqlProviderAdapter") //$NON-NLS-1$
-                .withImport("org.apache.ibatis.annotations.SelectProvider") //$NON-NLS-1$
+                .withImports(imports)
                 .withImports(recordType.getImportList());
 
         if (reuseResultMap) {
@@ -67,9 +74,7 @@ public class BasicSelectOneFunctionGenerator extends AbstractKotlinMapperFunctio
             builder.withExtraFunctionParts(fragmentGenerator.getAnnotatedResults());
         }
 
-        KotlinFunctionAndImports functionAndImports = builder.build();
-        addFunctionComment(functionAndImports);
-        return Optional.of(functionAndImports);
+        return builder.buildOptional();
     }
 
     @Override

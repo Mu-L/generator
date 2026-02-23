@@ -15,8 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
@@ -40,16 +42,18 @@ public class DeleteByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlin
             return Optional.empty();
         }
 
+        Set<String> imports = new HashSet<>();
+
         KotlinFunction function = KotlinFunction.newOneLineFunction(mapperName + ".deleteByPrimaryKey") //$NON-NLS-1$
                 .withCodeLine("delete {") //$NON-NLS-1$
                 .build();
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
-                .withExtraFunctionParts(fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(false))
-                .build();
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
 
-        addFunctionComment(functionAndImports);
-        return Optional.of(functionAndImports);
+        return KotlinFunctionAndImports.withFunction(function)
+                .withExtraFunctionParts(fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(false))
+                .withImports(imports)
+                .buildOptional();
     }
 
     @Override

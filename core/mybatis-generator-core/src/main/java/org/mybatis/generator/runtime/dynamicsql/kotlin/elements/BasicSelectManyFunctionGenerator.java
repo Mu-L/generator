@@ -15,8 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
@@ -37,6 +39,11 @@ public class BasicSelectManyFunctionGenerator extends AbstractKotlinMapperFuncti
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
+        Set<String> imports = new HashSet<>();
+        imports.add("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"); //$NON-NLS-1$
+        imports.add("org.mybatis.dynamic.sql.util.SqlProviderAdapter"); //$NON-NLS-1$
+        imports.add("org.apache.ibatis.annotations.SelectProvider"); //$NON-NLS-1$
+
         KotlinFunction function = KotlinFunction.newOneLineFunction("selectMany") //$NON-NLS-1$
                 .withExplicitReturnType("List<" //$NON-NLS-1$
                         + recordType.getShortNameWithTypeArguments()
@@ -47,15 +54,14 @@ public class BasicSelectManyFunctionGenerator extends AbstractKotlinMapperFuncti
                 .withAnnotation("@SelectProvider(type=SqlProviderAdapter::class, method=\"select\")") //$NON-NLS-1$
                 .build();
 
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
+
         KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
-                .withImport("org.mybatis.dynamic.sql.select.render.SelectStatementProvider") //$NON-NLS-1$
-                .withImport("org.mybatis.dynamic.sql.util.SqlProviderAdapter") //$NON-NLS-1$
-                .withImport("org.apache.ibatis.annotations.SelectProvider") //$NON-NLS-1$
+                .withImports(imports)
                 .withImports(recordType.getImportList())
                 .withExtraFunctionParts(fragmentGenerator.getAnnotatedResults())
                 .build();
 
-        addFunctionComment(functionAndImports);
         return Optional.of(functionAndImports);
     }
 

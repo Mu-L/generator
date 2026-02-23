@@ -15,8 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
@@ -43,6 +45,8 @@ public class UpdateByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlin
             return Optional.empty();
         }
 
+        Set<String> imports = new HashSet<>();
+
         KotlinFunction function = KotlinFunction.newOneLineFunction(mapperName + ".updateByPrimaryKey") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("row") //$NON-NLS-1$
                         .withDataType(recordType.getShortNameWithTypeArguments())
@@ -50,14 +54,14 @@ public class UpdateByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlin
                 .withCodeLine("update {") //$NON-NLS-1$
                 .build();
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
+
+        return KotlinFunctionAndImports.withFunction(function)
+                .withImports(imports)
                 .withImports(recordType.getImportList())
                 .withExtraFunctionParts(fragmentGenerator.getSetEqualLines(introspectedTable.getNonPrimaryKeyColumns(), false))
                 .withExtraFunctionParts(fragmentGenerator.getPrimaryKeyWhereClauseAndParameters(true))
-                .build();
-
-        addFunctionComment(functionAndImports);
-        return Optional.of(functionAndImports);
+                .buildOptional();
     }
 
     @Override

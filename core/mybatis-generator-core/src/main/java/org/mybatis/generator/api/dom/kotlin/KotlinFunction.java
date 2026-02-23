@@ -97,6 +97,11 @@ public class KotlinFunction extends KotlinNamedItem {
             return this;
         }
 
+        public Builder withCodeLines(List<String> codeLines) {
+            this.codeLines.addAll(codeLines);
+            return this;
+        }
+
         public Builder withExplicitReturnType(String explicitReturnType) {
             this.explicitReturnType = explicitReturnType;
             return this;

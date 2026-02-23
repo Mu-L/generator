@@ -15,8 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
@@ -41,18 +43,21 @@ public class InsertMultipleVarargExtensionFunctionGenerator extends AbstractKotl
             return Optional.empty();
         }
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(
-                KotlinFunction.newOneLineFunction(mapperName + ".insertMultiple") //$NON-NLS-1$
+        Set<String> imports = new HashSet<>();
+
+        KotlinFunction function = KotlinFunction.newOneLineFunction(mapperName + ".insertMultiple") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("vararg records") //$NON-NLS-1$
                         .withDataType(recordType.getShortNameWithTypeArguments()) //$NON-NLS-1$ //$NON-NLS-2$
                         .build())
                 .withCodeLine("insertMultiple(records.toList())") //$NON-NLS-1$
-                .build())
-                .withImports(recordType.getImportList())
                 .build();
 
-        addFunctionComment(functionAndImports);
-        return Optional.of(functionAndImports);
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
+
+        return KotlinFunctionAndImports.withFunction(function)
+                .withImports(imports)
+                .withImports(recordType.getImportList())
+                .buildOptional();
     }
 
     @Override

@@ -19,6 +19,7 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
@@ -87,6 +88,10 @@ public class KotlinFunctionAndImports {
 
         public KotlinFunctionAndImports build() {
             return new KotlinFunctionAndImports(this);
+        }
+
+        public Optional<KotlinFunctionAndImports> buildOptional() {
+            return Optional.of(build());
         }
     }
 }

@@ -15,8 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
@@ -37,6 +39,8 @@ public class UpdateSelectiveColumnsExtensionFunctionGenerator extends AbstractKo
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
+        Set<String> imports = new HashSet<>();
+        imports.add("org.mybatis.dynamic.sql.util.kotlin.KotlinUpdateBuilder"); //$NON-NLS-1$
 
         KotlinFunction function = KotlinFunction.newOneLineFunction("KotlinUpdateBuilder.updateSelectiveColumns") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("row") //$NON-NLS-1$
@@ -45,14 +49,13 @@ public class UpdateSelectiveColumnsExtensionFunctionGenerator extends AbstractKo
                 .withCodeLine("apply {")
                 .build();
 
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(function)
-                .withImport("org.mybatis.dynamic.sql.util.kotlin.KotlinUpdateBuilder") //$NON-NLS-1$
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
+
+        return KotlinFunctionAndImports.withFunction(function)
+                .withImports(imports)
                 .withImports(recordType.getImportList())
                 .withExtraFunctionParts(fragmentGenerator.getSetEqualWhenPresentLines(introspectedTable.getAllColumns(), true))
-                .build();
-
-        addFunctionComment(functionAndImports);
-        return Optional.of(functionAndImports);
+                .buildOptional();
     }
 
     @Override

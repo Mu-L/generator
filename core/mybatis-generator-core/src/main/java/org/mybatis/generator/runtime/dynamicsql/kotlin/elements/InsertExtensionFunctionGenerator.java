@@ -15,9 +15,11 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -26,6 +28,7 @@ import org.mybatis.generator.api.dom.kotlin.KotlinArg;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinFunction;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
+import org.mybatis.generator.runtime.KotlinFunctionParts;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 
 public class InsertExtensionFunctionGenerator extends AbstractKotlinMapperFunctionGenerator {
@@ -44,21 +47,31 @@ public class InsertExtensionFunctionGenerator extends AbstractKotlinMapperFuncti
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
-        KotlinFunctionAndImports functionAndImports = KotlinFunctionAndImports.withFunction(
-                KotlinFunction.newOneLineFunction(mapperName + ".insert") //$NON-NLS-1$
+        Set<String> imports = new HashSet<>();
+        imports.add("org.mybatis.dynamic.sql.util.kotlin.mybatis3.insert");
+
+        KotlinFunctionParts functionBody = generateBody();
+
+        KotlinFunction function = KotlinFunction.newOneLineFunction(mapperName + ".insert") //$NON-NLS-1$
                 .withArgument(KotlinArg.newArg("row") //$NON-NLS-1$
                         .withDataType(recordType.getShortNameWithTypeArguments())
                         .build())
-                .build())
-                .withImport("org.mybatis.dynamic.sql.util.kotlin.mybatis3.insert") //$NON-NLS-1$
-                .withImports(recordType.getImportList())
+                .withCodeLines(functionBody.getCodeLines())
                 .build();
 
-        addFunctionComment(functionAndImports);
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
 
-        KotlinFunction function = functionAndImports.getFunction();
+        return KotlinFunctionAndImports.withFunction(function)
+                .withImports(imports)
+                .withImports(functionBody.getImports())
+                .withImports(recordType.getImportList())
+                .buildOptional();
+    }
 
-        function.addCodeLine("insert(this::insert, row, " + tableFieldName //$NON-NLS-1$
+    private KotlinFunctionParts generateBody() {
+        KotlinFunctionParts.Builder builder = new KotlinFunctionParts.Builder();
+
+        builder.withCodeLine("insert(this::insert, row, " + tableFieldName //$NON-NLS-1$
                 + ") {"); //$NON-NLS-1$
 
         List<IntrospectedColumn> columns =
@@ -66,16 +79,16 @@ public class InsertExtensionFunctionGenerator extends AbstractKotlinMapperFuncti
         for (IntrospectedColumn column : columns) {
             KotlinFragmentGenerator.FieldNameAndImport fieldNameAndImport =
                     fragmentGenerator.calculateFieldNameAndImport(tableFieldName, supportObjectImport, column);
-            functionAndImports.getImports().add(fieldNameAndImport.importString());
+            builder.withImport(fieldNameAndImport.importString());
 
-            function.addCodeLine("    map(" + fieldNameAndImport.fieldName() //$NON-NLS-1$
+            builder.withCodeLine("    map(" + fieldNameAndImport.fieldName() //$NON-NLS-1$
                     + ") toProperty \"" + column.getJavaProperty() //$NON-NLS-1$
                     + "\""); //$NON-NLS-1$
         }
 
-        function.addCodeLine("}"); //$NON-NLS-1$
+        builder.withCodeLine("}"); //$NON-NLS-1$
 
-        return Optional.of(functionAndImports);
+        return builder.build();
     }
 
     @Override

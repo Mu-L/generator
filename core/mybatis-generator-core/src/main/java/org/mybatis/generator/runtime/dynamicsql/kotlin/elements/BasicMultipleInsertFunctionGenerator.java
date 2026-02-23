@@ -15,8 +15,10 @@
  */
 package org.mybatis.generator.runtime.dynamicsql.kotlin.elements;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.FullyQualifiedKotlinType;
@@ -45,6 +47,10 @@ public class BasicMultipleInsertFunctionGenerator extends AbstractKotlinMapperFu
     }
 
     private KotlinFunctionAndImports generateMethodWithGeneratedKeys(GeneratedKey gk) {
+        Set<String> imports = new HashSet<>();
+        imports.add("org.mybatis.dynamic.sql.util.SqlProviderAdapter"); //$NON-NLS-1$
+        imports.add("org.apache.ibatis.annotations.InsertProvider"); //$NON-NLS-1$
+        imports.add("org.apache.ibatis.annotations.Param"); //$NON-NLS-1$
 
         KotlinFunction function = KotlinFunction.newOneLineFunction("insertMultiple") //$NON-NLS-1$
                 .withExplicitReturnType("Int") //$NON-NLS-1$
@@ -62,19 +68,16 @@ public class BasicMultipleInsertFunctionGenerator extends AbstractKotlinMapperFu
                         + " method = \"insertMultipleWithGeneratedKeys\")") //$NON-NLS-1$
                 .build();
 
-        KotlinFunctionAndImports.Builder builder = KotlinFunctionAndImports.withFunction(function)
-                .withImport("org.mybatis.dynamic.sql.util.SqlProviderAdapter") //$NON-NLS-1$
-                .withImport("org.apache.ibatis.annotations.InsertProvider") //$NON-NLS-1$
-                .withImport("org.apache.ibatis.annotations.Param") //$NON-NLS-1$
-                .withImports(recordType.getImportList());
+        commentGenerator.addGeneralFunctionComment(function, introspectedTable, imports);
 
+        KotlinFunctionAndImports.Builder builder = KotlinFunctionAndImports.withFunction(function)
+                .withImports(imports)
+                .withImports(recordType.getImportList());
 
         GeneratedKeyAnnotationUtility.getKotlinMultiRowGeneratedKeyAnnotation(introspectedTable, gk)
                 .ifPresent(builder::withExtraFunctionParts);
 
-        KotlinFunctionAndImports functionAndImports = builder.build();
-        addFunctionComment(functionAndImports);
-        return functionAndImports;
+        return builder.build();
     }
 
     @Override

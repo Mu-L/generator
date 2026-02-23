@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.runtime.AbstractKotlinFunctionGenerator;
-import org.mybatis.generator.runtime.KotlinFunctionAndImports;
 
 public abstract class AbstractKotlinMapperFunctionGenerator extends AbstractKotlinFunctionGenerator {
     protected final String tableFieldName;
@@ -27,11 +26,6 @@ public abstract class AbstractKotlinMapperFunctionGenerator extends AbstractKotl
     protected AbstractKotlinMapperFunctionGenerator(BaseBuilder<?> builder) {
         super(builder);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-    }
-
-    protected void addFunctionComment(KotlinFunctionAndImports functionAndImports) {
-        commentGenerator.addGeneralFunctionComment(functionAndImports.getFunction(), introspectedTable,
-                functionAndImports.getImports());
     }
 
     public abstract static class BaseBuilder<T extends BaseBuilder<T>> extends AbstractGeneratorBuilder<T> {
