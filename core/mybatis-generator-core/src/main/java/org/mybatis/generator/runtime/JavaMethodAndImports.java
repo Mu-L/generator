@@ -15,6 +15,8 @@
  */
 package org.mybatis.generator.runtime;
 
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -86,8 +88,7 @@ public class JavaMethodAndImports {
 
         public Builder withExtraMethodParts(JavaMethodParts javaMethodParts) {
             if (method == null) {
-                // TODO - test and externalize
-                throw new InternalException("Method must be set before adding method parts.");
+                throw new InternalException(getString("RuntimeError.31")); //$NON-NLS-1$
             }
 
             for (Parameter parameter : javaMethodParts.getParameters()) {
