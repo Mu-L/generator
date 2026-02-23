@@ -192,7 +192,6 @@ public class KotlinMapperAndExtensionsGenerator extends AbstractKotlinGenerator 
                 .withTableFieldName(supportClassGenerator.getTablePropertyName())
                 .withRecordType(recordType)
                 .withMapperName(mapperName)
-                .withSupportObjectImport(supportClassGenerator.getSupportObjectImport())
                 .withFragmentGenerator(fragmentGenerator)
                 .build()
                 .execute(mapperFile);
@@ -214,7 +213,6 @@ public class KotlinMapperAndExtensionsGenerator extends AbstractKotlinGenerator 
                 .withTableFieldName(supportClassGenerator.getTablePropertyName())
                 .withRecordType(recordType)
                 .withMapperName(mapperName)
-                .withSupportObjectImport(supportClassGenerator.getSupportObjectImport())
                 .withFragmentGenerator(fragmentGenerator)
                 .build()
                 .execute(mapperFile);

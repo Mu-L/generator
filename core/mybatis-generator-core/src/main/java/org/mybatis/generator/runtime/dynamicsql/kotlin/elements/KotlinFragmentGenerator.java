@@ -248,6 +248,42 @@ public class KotlinFragmentGenerator {
 
     public record FieldNameAndImport(String fieldName, String importString) { }
 
+    public KotlinFunctionParts generateInsertMultipleBody(String functionShortName) {
+        KotlinFunctionParts.Builder builder = new KotlinFunctionParts.Builder();
+
+        builder.withCodeLine(functionShortName + "(this::insertMultiple" //$NON-NLS-1$
+                + ", records, " + tableFieldName //$NON-NLS-1$
+                + ") {"); //$NON-NLS-1$
+
+        return completeInsertBody(builder);
+    }
+
+    public KotlinFunctionParts generateInsertBody() {
+        KotlinFunctionParts.Builder builder = new KotlinFunctionParts.Builder();
+
+        builder.withCodeLine("insert(this::insert, row, " + tableFieldName //$NON-NLS-1$
+                + ") {"); //$NON-NLS-1$
+
+        return completeInsertBody(builder);
+    }
+
+    private KotlinFunctionParts completeInsertBody(KotlinFunctionParts.Builder builder) {
+        List<IntrospectedColumn> columns =
+                ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
+        for (IntrospectedColumn column : columns) {
+            FieldNameAndImport fieldNameAndImport =
+                    calculateFieldNameAndImport(tableFieldName, supportObjectImport, column);
+            builder.withImport(fieldNameAndImport.importString());
+
+            builder.withCodeLine("    map(" + fieldNameAndImport.fieldName() //$NON-NLS-1$
+                    + ") toProperty \"" + column.getJavaProperty() //$NON-NLS-1$
+                    + "\""); //$NON-NLS-1$
+        }
+
+        builder.withCodeLine("}"); //$NON-NLS-1$
+        return builder.build();
+    }
+
     public static class Builder {
         private @Nullable IntrospectedTable introspectedTable;
         private @Nullable String resultMapId;
