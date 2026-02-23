@@ -17,11 +17,14 @@ package org.mybatis.generator.runtime;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Method;
+import org.mybatis.generator.api.dom.java.Parameter;
+import org.mybatis.generator.exception.InternalException;
 
 public class JavaMethodAndImports {
 
@@ -81,8 +84,32 @@ public class JavaMethodAndImports {
             return this;
         }
 
+        public Builder withExtraMethodParts(JavaMethodParts javaMethodParts) {
+            if (method == null) {
+                // TODO - test and externalize
+                throw new InternalException("Method must be set before adding method parts.");
+            }
+
+            for (Parameter parameter : javaMethodParts.getParameters()) {
+                method.addParameter(parameter);
+            }
+
+            for (String annotation : javaMethodParts.getAnnotations()) {
+                method.addAnnotation(annotation);
+            }
+
+            method.addBodyLines(javaMethodParts.getBodyLines());
+
+            withImports(javaMethodParts.getImports());
+            return this;
+        }
+
         public JavaMethodAndImports build() {
             return new JavaMethodAndImports(this);
+        }
+
+        public Optional<JavaMethodAndImports> buildOptional() {
+            return Optional.of(build());
         }
     }
 }
