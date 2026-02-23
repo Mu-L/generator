@@ -711,6 +711,21 @@ public abstract class CodeGenerationAttributes {
         return getModelType() == ModelType.RECORD;
     }
 
+    public @Nullable String findTableOrClientProperty(String property) {
+        String value = getTableConfigurationProperty(property);
+        if (!stringHasValue(value)) {
+            value = context.getJavaClientGeneratorConfiguration()
+                    .map(c -> c.getProperty(property))
+                    .orElse(null);
+        }
+
+        return value;
+    }
+
+    public boolean findTableOrClientPropertyAsBoolean(String property) {
+        return Boolean.parseBoolean(findTableOrClientProperty(property));
+    }
+
     public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
         private @Nullable KnownRuntime knownRuntime;
         private @Nullable TableConfiguration tableConfiguration;
