@@ -91,16 +91,11 @@ public class CodeGenUtils {
      *
      * @param parentElement The parent element to which the generated element will be added.
      * @param generator The XML element generator to execute.
-     * @return true if the element was successfully generated and added to the parent element, false otherwise.
      */
-    public static boolean executeXmlElementGenerator(XmlElement parentElement, AbstractXmlElementGenerator generator) {
-        return generator.generateElement()
+    public static void executeXmlElementGenerator(XmlElement parentElement, AbstractXmlElementGenerator generator) {
+        generator.generateElement()
                 .filter(generator::callPlugins)
-                .map(mi -> {
-                    parentElement.addElement(mi);
-                    return true;
-                })
-                .orElse(false);
+                .ifPresent(parentElement::addElement);
     }
 
     /**
