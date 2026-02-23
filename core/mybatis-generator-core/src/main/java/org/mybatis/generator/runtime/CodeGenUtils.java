@@ -18,7 +18,6 @@ package org.mybatis.generator.runtime;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 public class CodeGenUtils {
     private CodeGenUtils() {
@@ -59,24 +58,5 @@ public class CodeGenUtils {
                 .orElse(false);
     }
 
-    /**
-     * Executes the given class method generator, calls plugins, and applies the generated method to the class.
-     *
-     * @param topLevelClass The class to which the method will be added.
-     * @param generator The class method generator to execute.
-     * @return true if the method was successfully generated and added to the class, false otherwise.
-     */
-    public static boolean executeClassMethodGenerator(TopLevelClass topLevelClass,
-                                                      AbstractJavaClassMethodGenerator generator) {
-        return generator.generateMethodAndImports()
-                .filter(mi -> generator.callPlugins(mi.getMethod(), topLevelClass))
-                .map(mi -> {
-                    topLevelClass.addMethod(mi.getMethod());
-                    topLevelClass.addImportedTypes(mi.getImports());
-                    topLevelClass.addStaticImports(mi.getStaticImports());
-                    return true;
-                })
-                .orElse(false);
-    }
 
 }
