@@ -35,7 +35,6 @@ import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.RootClassInfo;
-import org.mybatis.generator.runtime.CodeGenUtils;
 
 public class RecordWithBLOBsGenerator extends AbstractJavaGenerator {
 
@@ -129,7 +128,7 @@ public class RecordWithBLOBsGenerator extends AbstractJavaGenerator {
         method.addBodyLine(sb.toString());
 
         for (IntrospectedColumn introspectedColumn : introspectedTable.getBLOBColumns()) {
-            method.addBodyLine(CodeGenUtils.generateFieldSetterForConstructor(introspectedColumn));
+            method.addBodyLine(generateFieldSetterForConstructor(introspectedColumn));
         }
 
         topLevelClass.addMethod(method);

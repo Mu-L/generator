@@ -36,7 +36,6 @@ import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.RootClassInfo;
-import org.mybatis.generator.runtime.CodeGenUtils;
 
 public class BaseRecordGenerator extends AbstractJavaGenerator {
 
@@ -158,7 +157,7 @@ public class BaseRecordGenerator extends AbstractJavaGenerator {
 
         for (IntrospectedColumn introspectedColumn : constructorColumns) {
             if (!superColumns.contains(introspectedColumn.getActualColumnName())) {
-                method.addBodyLine(CodeGenUtils.generateFieldSetterForConstructor(introspectedColumn));
+                method.addBodyLine(generateFieldSetterForConstructor(introspectedColumn));
             }
         }
 

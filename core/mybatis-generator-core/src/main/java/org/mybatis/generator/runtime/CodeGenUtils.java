@@ -18,7 +18,6 @@ package org.mybatis.generator.runtime;
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
 import org.jspecify.annotations.Nullable;
-import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
@@ -31,14 +30,6 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 public class CodeGenUtils {
     private CodeGenUtils() {
         // Utility class, no instantiation allowed
-    }
-
-    public static String generateFieldSetterForConstructor(IntrospectedColumn introspectedColumn) {
-        return "this." //$NON-NLS-1$
-                + introspectedColumn.getJavaProperty()
-                + " = " //$NON-NLS-1$
-                + introspectedColumn.getJavaProperty()
-                + ';';
     }
 
     public static void addPartsToMethod(JavaMethodAndImports.Builder builder, Method method,

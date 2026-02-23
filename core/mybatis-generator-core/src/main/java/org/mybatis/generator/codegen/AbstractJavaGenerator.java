@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.jspecify.annotations.Nullable;
+import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
@@ -97,6 +98,14 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
     private void addGeneratedAnnotation(Method method, TopLevelClass topLevelClass) {
         commentGenerator.addGeneralMethodAnnotation(method, introspectedTable,
                 topLevelClass.getImportedTypes());
+    }
+
+    public String generateFieldSetterForConstructor(IntrospectedColumn introspectedColumn) {
+        return "this." //$NON-NLS-1$
+                + introspectedColumn.getJavaProperty()
+                + " = " //$NON-NLS-1$
+                + introspectedColumn.getJavaProperty()
+                + ';';
     }
 
     public abstract List<CompilationUnit> getCompilationUnits();
