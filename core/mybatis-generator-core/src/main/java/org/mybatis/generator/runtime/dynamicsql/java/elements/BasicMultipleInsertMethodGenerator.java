@@ -29,7 +29,6 @@ import org.mybatis.generator.config.GeneratedKey;
 import org.mybatis.generator.runtime.AbstractJavaInterfaceMethodGenerator;
 import org.mybatis.generator.runtime.JavaMethodAndImports;
 import org.mybatis.generator.runtime.common.GeneratedKeyAnnotationUtility;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 
 public class BasicMultipleInsertMethodGenerator extends AbstractJavaInterfaceMethodGenerator {
 
@@ -42,7 +41,7 @@ public class BasicMultipleInsertMethodGenerator extends AbstractJavaInterfaceMet
 
     @Override
     public Optional<JavaMethodAndImports> generateMethodAndImports() {
-        if (!DynamicSqlUtils.generateMultipleRowInsert(introspectedTable)) {
+        if (!introspectedTable.getRules().generateMultipleRowInsertForDSQL()) {
             return Optional.empty();
         }
 

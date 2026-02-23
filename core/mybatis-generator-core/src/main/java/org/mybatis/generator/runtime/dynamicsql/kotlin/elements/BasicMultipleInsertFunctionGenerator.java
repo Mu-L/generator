@@ -26,7 +26,6 @@ import org.mybatis.generator.api.dom.kotlin.KotlinFunction;
 import org.mybatis.generator.config.GeneratedKey;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
 import org.mybatis.generator.runtime.common.GeneratedKeyAnnotationUtility;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 
 public class BasicMultipleInsertFunctionGenerator extends AbstractKotlinMapperFunctionGenerator {
     private final FullyQualifiedKotlinType recordType;
@@ -38,7 +37,7 @@ public class BasicMultipleInsertFunctionGenerator extends AbstractKotlinMapperFu
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
-        if (!DynamicSqlUtils.generateMultipleRowInsert(introspectedTable)) {
+        if (!introspectedTable.getRules().generateMultipleRowInsertForDSQL()) {
             return Optional.empty();
         }
 

@@ -26,7 +26,6 @@ import org.mybatis.generator.api.dom.kotlin.KotlinArg;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinFunction;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 
 public class UpdateByPrimaryKeySelectiveExtensionFunctionGenerator extends AbstractKotlinMapperFunctionGenerator {
     private final FullyQualifiedKotlinType recordType;
@@ -42,7 +41,7 @@ public class UpdateByPrimaryKeySelectiveExtensionFunctionGenerator extends Abstr
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
-        if (!DynamicSqlUtils.generateUpdateByPrimaryKey(introspectedTable)) {
+        if (!introspectedTable.getRules().generateUpdateByPrimaryKeyForDSQL()) {
             return Optional.empty();
         }
 

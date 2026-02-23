@@ -22,7 +22,6 @@ import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinFunction;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 
 public class DeleteByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlinMapperFunctionGenerator {
 
@@ -37,7 +36,7 @@ public class DeleteByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlin
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
-        if (!DynamicSqlUtils.generateDeleteByPrimaryKey(introspectedTable)) {
+        if (!introspectedTable.getRules().generateDeleteByPrimaryKeyForDSQL()) {
             return Optional.empty();
         }
 

@@ -26,7 +26,6 @@ import org.mybatis.generator.api.dom.kotlin.KotlinArg;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinFunction;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 import org.mybatis.generator.runtime.mybatis3.ListUtilities;
 
 public class InsertMultipleExtensionFunctionGenerator extends AbstractKotlinMapperFunctionGenerator {
@@ -45,7 +44,7 @@ public class InsertMultipleExtensionFunctionGenerator extends AbstractKotlinMapp
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
-        if (!DynamicSqlUtils.generateMultipleRowInsert(introspectedTable)) {
+        if (!introspectedTable.getRules().generateMultipleRowInsertForDSQL()) {
             return Optional.empty();
         }
 
@@ -53,7 +52,7 @@ public class InsertMultipleExtensionFunctionGenerator extends AbstractKotlinMapp
         // regular mapper method
         String functionImport;
         String functionShortName;
-        if (DynamicSqlUtils.canRetrieveMultiRowGeneratedKeys(introspectedTable)) {
+        if (introspectedTable.getGeneratedKey().isPresent()) {
             functionImport =
                     "org.mybatis.dynamic.sql.util.kotlin.mybatis3.insertMultipleWithGeneratedKeys"; //$NON-NLS-1$
             functionShortName = "insertMultipleWithGeneratedKeys"; //$NON-NLS-1$

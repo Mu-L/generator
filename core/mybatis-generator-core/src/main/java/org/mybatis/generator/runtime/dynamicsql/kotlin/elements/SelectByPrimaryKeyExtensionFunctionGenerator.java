@@ -22,7 +22,6 @@ import org.jspecify.annotations.Nullable;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinFunction;
 import org.mybatis.generator.runtime.KotlinFunctionAndImports;
-import org.mybatis.generator.runtime.dynamicsql.DynamicSqlUtils;
 
 public class SelectByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlinMapperFunctionGenerator {
     private final String mapperName;
@@ -36,7 +35,7 @@ public class SelectByPrimaryKeyExtensionFunctionGenerator extends AbstractKotlin
 
     @Override
     public Optional<KotlinFunctionAndImports> generateFunctionAndImports() {
-        if (!DynamicSqlUtils.generateSelectByPrimaryKey(introspectedTable)) {
+        if (!introspectedTable.getRules().generateSelectByPrimaryKeyForDSQL()) {
             return Optional.empty();
         }
 
