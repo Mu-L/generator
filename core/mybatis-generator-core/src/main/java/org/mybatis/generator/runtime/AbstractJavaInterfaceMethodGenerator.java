@@ -27,7 +27,7 @@ public abstract class AbstractJavaInterfaceMethodGenerator extends AbstractGener
     }
 
     /**
-     * Executes the given interface method generator, calls plugins, and applies the generated method to the interface.
+     * Executes this generator, calls plugins, and applies the generated method to the interface.
      *
      * @param interfaze The interface to which the method will be added.
      * @return true if the method was successfully generated and added to the interface, false otherwise.

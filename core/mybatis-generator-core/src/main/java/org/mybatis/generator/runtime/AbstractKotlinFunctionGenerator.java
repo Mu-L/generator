@@ -49,7 +49,7 @@ public abstract class AbstractKotlinFunctionGenerator extends AbstractGenerator 
 
     /**
      * Executes this generator, calls plugins, and applies the generated function and imports to
-     * the Kotlin file. This variant expects the generated function to be an extension function or a top level function.
+     * the Kotlin file. This variant expects the generated function to be a top-level function.
      *
      * @param kotlinFile The Kotlin file to which the generated function and imports will be added.
      * @return true if the function and imports were successfully generated and added to the Kotlin file, false
