@@ -19,7 +19,6 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.api.dom.xml.XmlElement;
 
 public class CodeGenUtils {
     private CodeGenUtils() {
@@ -80,15 +79,4 @@ public class CodeGenUtils {
                 .orElse(false);
     }
 
-    /**
-     * Executes the given XML element generator, calls plugins, and applies the generated element to the parent element.
-     *
-     * @param parentElement The parent element to which the generated element will be added.
-     * @param generator The XML element generator to execute.
-     */
-    public static void executeXmlElementGenerator(XmlElement parentElement, AbstractXmlElementGenerator generator) {
-        generator.generateElement()
-                .filter(generator::callPlugins)
-                .ifPresent(parentElement::addElement);
-    }
 }
