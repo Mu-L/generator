@@ -31,7 +31,7 @@ import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 import org.mybatis.generator.internal.util.StringUtility;
 import org.mybatis.generator.runtime.JavaFieldAndImports;
-import org.mybatis.generator.runtime.common.RootInterfaceUtility;
+import org.mybatis.generator.runtime.common.RootClassAndInterfaceUtility;
 import org.mybatis.generator.runtime.dynamicsql.java.elements.BasicInsertMethodGenerator;
 import org.mybatis.generator.runtime.dynamicsql.java.elements.BasicMultipleInsertMethodGenerator;
 import org.mybatis.generator.runtime.dynamicsql.java.elements.BasicSelectManyMethodGenerator;
@@ -70,7 +70,7 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
         recordType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         resultMapId = recordType.getShortNameWithoutTypeArguments() + "Result"; //$NON-NLS-1$
         boolean useSnakeCase =
-                introspectedTable.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
+                introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
 
         tableFieldName = calculateTableFieldName(useSnakeCase);
         fragmentGenerator = new FragmentGenerator.Builder()
@@ -150,7 +150,7 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
         interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Mapper")); //$NON-NLS-1$
         interfaze.addAnnotation("@Mapper"); //$NON-NLS-1$
 
-        RootInterfaceUtility.addRootInterfaceIsNecessary(interfaze, introspectedTable);
+        RootClassAndInterfaceUtility.addRootInterfaceIfNecessary(interfaze, introspectedTable);
         return interfaze;
     }
 

@@ -26,7 +26,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
-import org.mybatis.generator.runtime.common.RootInterfaceUtility;
+import org.mybatis.generator.runtime.common.RootClassAndInterfaceUtility;
 import org.mybatis.generator.runtime.mybatis3.javamapper.elements.CountByExampleMethodGenerator;
 import org.mybatis.generator.runtime.mybatis3.javamapper.elements.DeleteByExampleMethodGenerator;
 import org.mybatis.generator.runtime.mybatis3.javamapper.elements.DeleteByPrimaryKeyMethodGenerator;
@@ -58,7 +58,7 @@ public class JavaMapperGenerator extends AbstractJavaGenerator {
         interfaze.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(interfaze);
 
-        RootInterfaceUtility.addRootInterfaceIsNecessary(interfaze, introspectedTable);
+        RootClassAndInterfaceUtility.addRootInterfaceIfNecessary(interfaze, introspectedTable);
 
         addCountByExampleMethod(interfaze);
         addDeleteByExampleMethod(interfaze);

@@ -15,8 +15,7 @@
  */
 package org.mybatis.generator.runtime.common;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.mybatis.generator.api.IntrospectedTable;
@@ -24,17 +23,20 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.config.PropertyRegistry;
 
-public class RootInterfaceUtility {
-    public static void addRootInterfaceIsNecessary(Interface mapper, IntrospectedTable introspectedTable) {
-        String rootInterface = introspectedTable.findTableOrClientProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
+public class RootClassAndInterfaceUtility {
+    public static Optional<String> getRootClass(IntrospectedTable introspectedTable) {
+        return introspectedTable.findTableOrModelGeneratorProperty(PropertyRegistry.ANY_ROOT_CLASS);
+    }
 
-        if (stringHasValue(rootInterface)) {
+    public static void addRootInterfaceIfNecessary(Interface mapper, IntrospectedTable introspectedTable) {
+        introspectedTable.findTableOrClientGeneratorProperty(PropertyRegistry.ANY_ROOT_INTERFACE)
+                .ifPresent(rootInterface -> {
             FullyQualifiedJavaType baseInterface = new FullyQualifiedJavaType(rootInterface);
-            String inject =
-                    introspectedTable.findTableOrClientProperty(PropertyRegistry.ANY_INJECT_MODEL_INTO_ROOT_INTERFACE);
+            boolean inject = introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(
+                    PropertyRegistry.ANY_INJECT_MODEL_INTO_ROOT_INTERFACE);
 
             FullyQualifiedJavaType rootInterfaceType;
-            if (Boolean.parseBoolean(inject)) {
+            if (inject) {
                 rootInterfaceType = injectRootModel(baseInterface, calculateRootModel(introspectedTable));
             } else {
                 rootInterfaceType = baseInterface;
@@ -43,7 +45,7 @@ public class RootInterfaceUtility {
             mapper.addSuperInterface(rootInterfaceType);
             mapper.addImportedTypes(rootInterfaceType.getImportList().stream()
                     .map(FullyQualifiedJavaType::new).collect(Collectors.toSet()));
-        }
+        });
     }
 
     private static FullyQualifiedJavaType injectRootModel(FullyQualifiedJavaType baseInterface,
@@ -65,5 +67,4 @@ public class RootInterfaceUtility {
             return new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         }
     }
-
 }

@@ -43,7 +43,7 @@ public class KotlinDynamicSqlSupportClassGenerator extends AbstractGenerator {
     public KotlinDynamicSqlSupportClassGenerator(Builder builder) {
         super(builder);
         useSnakeCase =
-                introspectedTable.findTableOrClientPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
+                introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
         generate();
     }
 

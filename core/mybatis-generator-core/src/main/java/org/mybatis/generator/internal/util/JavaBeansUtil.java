@@ -292,6 +292,14 @@ public class JavaBeansUtil {
         return method;
     }
 
+    public static String generateFieldSetterForConstructor(IntrospectedColumn introspectedColumn) {
+        return "this." //$NON-NLS-1$
+                + introspectedColumn.getJavaProperty()
+                + " = " //$NON-NLS-1$
+                + introspectedColumn.getJavaProperty()
+                + ';';
+    }
+
     private static Method getBasicJavaBeansSetter(IntrospectedColumn introspectedColumn) {
         FullyQualifiedJavaType fqjt = introspectedColumn
                 .getFullyQualifiedJavaType();
