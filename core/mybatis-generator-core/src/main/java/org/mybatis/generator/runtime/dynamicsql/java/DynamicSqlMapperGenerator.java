@@ -78,6 +78,8 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
                 .withResultMapId(resultMapId)
                 .withTableFieldName(tableFieldName)
                 .useSnakeCase(useSnakeCase)
+                .withRecordType(recordType)
+                .withCommentGenerator(commentGenerator)
                 .build();
 
         hasGeneratedKeys = introspectedTable.getGeneratedKey().isPresent();
@@ -250,16 +252,14 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
 
     protected void addGeneralSelectMethod(Interface interfaze) {
         initializeSubBuilder(new GeneralSelectMethodGenerator.Builder())
-                .withTableFieldName(tableFieldName)
-                .withRecordType(recordType)
+                .withFragmentGenerator(fragmentGenerator)
                 .build()
                 .execute(interfaze);
     }
 
     protected void addSelectDistinctMethod(Interface interfaze) {
         initializeSubBuilder(new GeneralSelectDistinctMethodGenerator.Builder())
-                .withTableFieldName(tableFieldName)
-                .withRecordType(recordType)
+                .withFragmentGenerator(fragmentGenerator)
                 .build()
                 .execute(interfaze);
     }
