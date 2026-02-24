@@ -30,22 +30,25 @@ public class RootClassAndInterfaceUtility {
 
     public static void addRootInterfaceIfNecessary(Interface mapper, IntrospectedTable introspectedTable) {
         introspectedTable.findTableOrClientGeneratorProperty(PropertyRegistry.ANY_ROOT_INTERFACE)
-                .ifPresent(rootInterface -> {
-            FullyQualifiedJavaType baseInterface = new FullyQualifiedJavaType(rootInterface);
-            boolean inject = introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(
-                    PropertyRegistry.ANY_INJECT_MODEL_INTO_ROOT_INTERFACE);
+                .map(FullyQualifiedJavaType::new)
+                .ifPresent(rootInterface -> addRootInterface(mapper, introspectedTable, rootInterface));
+    }
 
-            FullyQualifiedJavaType rootInterfaceType;
-            if (inject) {
-                rootInterfaceType = injectRootModel(baseInterface, calculateRootModel(introspectedTable));
-            } else {
-                rootInterfaceType = baseInterface;
-            }
+    private static void addRootInterface(Interface mapper, IntrospectedTable introspectedTable,
+                                         FullyQualifiedJavaType rootInterface) {
+        boolean inject = introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(
+                PropertyRegistry.ANY_INJECT_MODEL_INTO_ROOT_INTERFACE);
 
-            mapper.addSuperInterface(rootInterfaceType);
-            mapper.addImportedTypes(rootInterfaceType.getImportList().stream()
-                    .map(FullyQualifiedJavaType::new).collect(Collectors.toSet()));
-        });
+        FullyQualifiedJavaType rootInterfaceType;
+        if (inject) {
+            rootInterfaceType = injectRootModel(rootInterface, calculateRootModel(introspectedTable));
+        } else {
+            rootInterfaceType = rootInterface;
+        }
+
+        mapper.addSuperInterface(rootInterfaceType);
+        mapper.addImportedTypes(rootInterfaceType.getImportList().stream()
+                .map(FullyQualifiedJavaType::new).collect(Collectors.toSet()));
     }
 
     private static FullyQualifiedJavaType injectRootModel(FullyQualifiedJavaType baseInterface,

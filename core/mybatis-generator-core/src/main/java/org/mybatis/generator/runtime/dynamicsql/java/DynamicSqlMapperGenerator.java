@@ -69,8 +69,8 @@ public class DynamicSqlMapperGenerator extends AbstractJavaGenerator {
 
         recordType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         resultMapId = recordType.getShortNameWithoutTypeArguments() + "Result"; //$NON-NLS-1$
-        boolean useSnakeCase =
-                introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
+        boolean useSnakeCase = introspectedTable
+                .findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
 
         tableFieldName = calculateTableFieldName(useSnakeCase);
         fragmentGenerator = new FragmentGenerator.Builder()

@@ -38,8 +38,8 @@ public class DynamicSqlSupportClassGenerator extends AbstractGenerator {
 
     private DynamicSqlSupportClassGenerator(Builder builder) {
         super(builder);
-        useSnakeCase =
-                introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
+        useSnakeCase = introspectedTable
+                .findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
     }
 
     public TopLevelClass generate() {

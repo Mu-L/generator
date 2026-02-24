@@ -49,8 +49,8 @@ public class KotlinFragmentGenerator {
         resultMapId = Objects.requireNonNull(builder.resultMapId);
         supportObjectImport = Objects.requireNonNull(builder.supportObjectImport);
         tableFieldName = Objects.requireNonNull(builder.tableFieldName);
-        useSnakeCase =
-                introspectedTable.findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
+        useSnakeCase = introspectedTable
+                .findTableOrClientGeneratorPropertyAsBoolean(PropertyRegistry.ANY_USE_SNAKE_CASE_IDENTIFIERS);
     }
 
     public KotlinFunctionParts getPrimaryKeyWhereClauseAndParameters(boolean forUpdate) {
